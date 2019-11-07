@@ -3,22 +3,17 @@ package structure;
 //Structure that represent's a Node from trie tree
 public class Node {
     private Node alphabet[]; //positional alphabet vector
-    private boolean endOfWord; //indicates if it's end of word
+    private boolean endOfWord[]; //positional vector that indicates if it's end of word
     
     //Node constructor
     public Node(){
         int i;
         this.alphabet  = new Node[26];
-        this.endOfWord = false;
+        this.endOfWord = new boolean[26];
         for(i=0;i<26;i++){
-            this.alphabet[i] = null;
+            this.alphabet[i]  = null;
+            this.endOfWord[i] = false;
         }   
-    }
-    
-    //Overloaded node constructor
-    public Node(Node alphabet[]){
-        this.alphabet  = alphabet;
-        this.endOfWord = false;  
     }
 
     //Alphabet getter
@@ -30,14 +25,17 @@ public class Node {
     public void setAlphabet(Node[] alphabet) {
         this.alphabet = alphabet;
     }
-
+    
     //EndOfWord getter
-    public boolean isEndOfWord() {
-        return endOfWord;
+    public boolean isEndOfWord(Character letter){
+        if(letter >= 'a' && letter <= 'z'){
+            return this.endOfWord[this.getIndex(letter)];  
+        }
+        return false;
     }
 
     //EndOfWord setter
-    public void setEndOfWord(boolean endOfWord) {
+    public void setEndOfWord(boolean[] endOfWord) {
         this.endOfWord = endOfWord;
     }
     
@@ -75,5 +73,28 @@ public class Node {
             return this.alphabet[this.getIndex(letter)];
         }
         return null;
+    }
+    
+    /* Add a new letter to this node
+     * Input:         Letter to be inserted and if it is endOfWord
+     * Return:        None
+     * Precondition:  The letter must not be in the node
+     * Postcondition: The letter is added to the node
+    */
+    public void add(Character letter, boolean endOfWord){
+        Node newNode = new Node();
+        this.alphabet[this.getIndex(letter)]  = newNode;
+        this.endOfWord[this.getIndex(letter)] = endOfWord;
+    }
+    
+    /* Remove a letter from this node
+     * Input:         Letter to be deleted
+     * Return:        None
+     * Precondition:  None
+     * Postcondition: The letter is deleted from this node
+    */
+    public void delete(Character letter){
+        this.alphabet[this.getIndex(letter)]  = null;
+        this.endOfWord[this.getIndex(letter)] = false;
     }
 }
