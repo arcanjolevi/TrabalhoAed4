@@ -6,16 +6,23 @@ import java.io.FileReader;
 //Class that manipulates a file
 public class File {
         
-    public Boolean WordChecks(String Line) {
+	//method that checks the word, returns true if it is right or false otherwise
+    public Boolean WordCheck(String Line) {
     	return Line.matches("[A-Za-z]+");
     }
     
-    public void loadFileInsert(String WayFile) throws Exception{
-        FileReader Read = new FileReader(WayFile);
+    /* Method that upload start file
+     * Input:		 File path to be load
+     * Return:		 None
+     * PreCondition: None
+     * PosCondition: words loaded
+     */
+    public void loadFileInsert(String FilePath) throws Exception{
+        FileReader Read = new FileReader(FilePath);
         BufferedReader ReadFile = new BufferedReader(Read);
         String Line = ReadFile.readLine();
         while(Line != null) {
-        	if(this.WordChecks(Line)) {
+        	if(this.WordCheck(Line)) {
         		Line.toLowerCase();
 //				inserir();
         	}
@@ -23,8 +30,15 @@ public class File {
         }
         ReadFile.close();
     }
-    public void loadFileRemove(String WayFile) throws Exception{
-        FileReader Read = new FileReader(WayFile);
+    
+    /* Method that uploads the stopwords file and removes them from the dictionary
+     * Input:		 File path to be load
+     * Return:		 None
+     * PreCondition: None
+     * PosCondition: words loaded
+     */
+    public void loadFileRemove(String FilePath) throws Exception{
+        FileReader Read = new FileReader(FilePath);
         BufferedReader ReadFile = new BufferedReader(Read);
         String Line = ReadFile.readLine();
         while(Line != null) {
