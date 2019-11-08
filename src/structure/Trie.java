@@ -9,4 +9,13 @@ public class Trie{
     public Trie(){
         this.node = null;
     }
+
+    public Node getNode() {
+        return node;
+    }
+
+    public void setNode(Node node) {
+        this.node = node;
+    }
+    
 }
