@@ -9,4 +9,7 @@ public class Trie{
     public Trie(){
         this.node = null;
     }
+//Class that represents a Trie tree
+public class Trie{
+    
 }
