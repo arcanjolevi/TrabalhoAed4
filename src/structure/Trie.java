@@ -56,6 +56,7 @@ public class Trie{
         }
     }
     
+    
     /*                          TESTE                   */
     public void print(){
         int i;
