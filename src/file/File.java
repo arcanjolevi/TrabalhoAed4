@@ -2,6 +2,7 @@ package file;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import structure.Trie;
 
 //Class that manipulates a file
 public class File {
@@ -17,18 +18,20 @@ public class File {
      * PreCondition: None
      * PosCondition: words loaded
      */
-    public void loadFileInsert(String FilePath) throws Exception{
+    public Trie loadFileInsert(String FilePath) throws Exception{
+        Trie niceTrie = new Trie();
         FileReader Read = new FileReader(FilePath);
         BufferedReader ReadFile = new BufferedReader(Read);
         String Line = ReadFile.readLine();
         while(Line != null) {
         	if(this.WordCheck(Line)) {
-        		Line.toLowerCase();
-//				inserir();
+        		Line = Line.toLowerCase();
+				niceTrie.insert(Line);
         	}
         	Line = ReadFile.readLine();        	
         }
         ReadFile.close();
+        return niceTrie;
     }
     
     /* Method that uploads the stopwords file and removes them from the dictionary

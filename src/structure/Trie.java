@@ -1,69 +1,110 @@
 package structure;
 
-import structure.Node;
-
 //Class that represents a Trie tree
 public class Trie{
-    private Node node;
+    private boolean endOfWord;
+    private Trie alphabet[];
     
     //Trie constructor
     public Trie(){
-        this.node = null;
-    }
-
-    //Node getter
-    public Node getNode() {
-        return node;
-    }
-
-    //Node setter
-    public void setNode(Node node) {
-        this.node = node;
+        this.alphabet  = new Trie[26];
+        this.endOfWord = false;
+        this.initTrie();
     }
     
-    /*                          TESTE                   */
-    private Node insert(String text, Node node){
-        if(node == null){
-            node = new Node();
-            if(text.length() == 1){
-                node.add(text.toCharArray()[0], true);
-            }else if(text.length() >= 2){
-                node.add(text.toCharArray()[0], false);
-                insert(text.substring(1, text.length()),node.getNext(text.toCharArray()[0]));
-            }
-        }else{
-            
-        }
-        return node;
-    }
-    
-    /* Insert a word on the trie 
-     * Input:        Word to be inserted
-     * Return:       None
-     * Precondition: None
-    */
-    public void insert(String text){
-        if(this.node == null){
-            this.node = new Node();
-            if(text.length() == 1){
-                this.node.add(text.toCharArray()[0], true);
-            }else if(text.length() >= 2){
-                this.node.add(text.toCharArray()[0], false);
-                this.insert(text.substring(1, text.length()),this.node.getNext(text.toCharArray()[0]));
-            }
-        }else{
-            
-        }
-    }
-    
-    
-    /*                          TESTE                   */
-    public void print(){
+    private void initTrie(){
         int i;
         for(i=0;i<26;i++){
-            if(this.node.isActive( (char) ('a' + i))){
-                System.out.println(((char) ('a'+ i) )+ "\n");
+            this.alphabet[i]  = null;
+        }
+    }
+    
+    public Integer getIndex(Character letter){
+        return (int) (letter - 'a');
+    }
+    
+    public Character getCharacter(Integer index){
+        return (char) ('a' + index);
+    }
+
+    //EndOfWord getter
+    public boolean isEndOfWord() {
+        return endOfWord;
+    }
+
+    //EndOfWord setter
+    public void setEndOfWord(boolean endOfWord) {
+        this.endOfWord = endOfWord;
+    }
+
+    //Letter getter
+    public Trie getLetter(Integer index) {
+        return alphabet[index];
+    }
+
+    //Letter setter
+    public void setLetter(Trie letter,Integer index) {
+        this.alphabet[index] = letter;
+    }
+    
+    //Letter overloaded setter
+    public void setLetter(Trie letter,Character index) {
+        this.alphabet[this.getIndex(index)] = letter;
+    }
+    
+    /* Verify if a letter is or not in the vector
+     * Input:        Letter to be checked
+     * Return:       True if it's in or false otherwise
+     * Precondition: The letter must be betwen a and z
+    */
+    public boolean isInserted(Character letter){
+        return this.alphabet[this.getIndex(letter)] != null;
+    }
+
+        /* Verify if a letter is or not in the vector
+     * Input:        Letter to be checked
+     * Return:       True if it's in or false otherwise
+     * Precondition: The letter must be betwen a and z
+    */
+    public boolean isInserted(Integer index){
+        return this.alphabet[index] != null;
+    }
+    
+    /* Insert a word in the trie
+     * Input:        Word to be inserted
+     * Return:       Node inserted
+     * Precondition: The text must only contain letters betwen a and z or empty word
+    */
+    public void insert(String text){
+        if(text.length() > 0){
+            Character letterToInsert = text.toCharArray()[0];
+            if(this.isInserted(letterToInsert)){
+               this.alphabet[this.getIndex(letterToInsert)].insert(text.substring(1, text.length()));
+            }else{
+                this.alphabet[this.getIndex(letterToInsert)] = new Trie();
+                this.alphabet[this.getIndex(letterToInsert)].insert(text.substring(1, text.length()));
+            }
+        }else{
+            this.endOfWord = true;
+        }
+    }
+    
+    private void print(String prefix){
+        int i;
+        for(i=0;i<26;i++){
+            if(this.isInserted(i)){
+                prefix += this.getCharacter(i);
+                if(this.alphabet[i].endOfWord == true){
+                    System.out.println(prefix);
+                }
+                this.alphabet[i].print(prefix);
+                prefix = prefix.substring(0, prefix.length()-1);
             }
         }
     }
+    
+    public void print(){
+        this.print("");
+    }
+    
 }
