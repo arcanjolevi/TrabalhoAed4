@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) throws Exception{
         File f = new File();
         Trie t;
-        t = f.loadFileInsert("/home/caio/Desktop/lucasGay.txt");
+        t = f.loadWordsFile("/home/caio/Desktop/lucasGay.txt");
         t.print();
     }
 }

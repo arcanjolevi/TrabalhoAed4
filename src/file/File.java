@@ -6,46 +6,47 @@ import structure.Trie;
 
 //Class that manipulates a file
 public class File {
-        
-	//method that checks the word, returns true if it is right or false otherwise
-    public Boolean WordCheck(String Line) {
-    	return Line.matches("[A-Za-z]+");
+    /* Method that check if the word is a valid word
+     * Input:        Word to be checked
+     * Return:       True if it's a valid word or false otherwise
+     * Precondition: None
+    */
+    public Boolean WordCheck(String line) {
+    	return line.matches("[A-Za-z]+");
     }
     
-    /* Method that upload start file
-     * Input:		 File path to be load
-     * Return:		 None
+    /* Method that load the file with the strings to be added to the tree
+     * Input:        File path to be loaded
+     * Return:       Trie class filled with the read words
      * PreCondition: None
-     * PosCondition: words loaded
      */
-    public Trie loadFileInsert(String FilePath) throws Exception{
-        Trie niceTrie = new Trie();
-        FileReader Read = new FileReader(FilePath);
+    public Trie loadWordsFile(String filePath) throws Exception{
+        Trie trie = new Trie();
+        FileReader Read = new FileReader(filePath);
         BufferedReader ReadFile = new BufferedReader(Read);
         String Line = ReadFile.readLine();
         while(Line != null) {
-        	if(this.WordCheck(Line)) {
+        	if(this.WordCheck(Line) == true) {
         		Line = Line.toLowerCase();
-				niceTrie.insert(Line);
+				trie.insert(Line);
         	}
         	Line = ReadFile.readLine();        	
         }
         ReadFile.close();
-        return niceTrie;
+        return trie;
     }
     
-    /* Method that uploads the stopwords file and removes them from the dictionary
-     * Input:		 File path to be load
-     * Return:		 None
+    /* Method that load the stopwords file and remove them from the dictionary
+     * Input         File path to be loaded
+     * Return:       None
      * PreCondition: None
-     * PosCondition: words loaded
      */
-    public void loadFileRemove(String FilePath) throws Exception{
-        FileReader Read = new FileReader(FilePath);
+    public void loadStopWordsFile(String filePath) throws Exception{
+        FileReader Read = new FileReader(filePath);
         BufferedReader ReadFile = new BufferedReader(Read);
         String Line = ReadFile.readLine();
         while(Line != null) {
-        	Line.toLowerCase();
+        	Line = Line.toLowerCase();
 //			remove();
         	Line = ReadFile.readLine();        	
         }
