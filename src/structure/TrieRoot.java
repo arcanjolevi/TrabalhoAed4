@@ -27,8 +27,4 @@ public class TrieRoot {
         if(text.toLowerCase().compareTo(text) != 0) throw new Exception("Palavra inválida");
         this.trie.insert(text);
     }
-    
-    public void printDictionary(){
-        this.trie.printDictionary();
-    }
 }

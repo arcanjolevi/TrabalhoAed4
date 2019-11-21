@@ -39,7 +39,7 @@ public class Window extends JFrame implements Listener{
     private JButton buttonConsultar;
     private JButton buttonImprimirDicionrio;
     private JButton buttonConsultarSemelhante;
-    private String stringToPrint;
+    public String stringToPrint;
     private Boolean readyToPrint;
 	
     public void startWindow() {
@@ -253,13 +253,17 @@ public class Window extends JFrame implements Listener{
             this.stringToPrint = "";
             this.readyToPrint  = false;
 	}
+        
+    public void printAAAAA(){
+        System.out.println(this.stringToPrint);
+    }
 
     @Override
     public void listen(String msg) {
-        String aux[] = msg.split(".");
+        String aux[] = msg.split(",");
         
-        if(aux[0].compareTo("printDictionaryStarted.") == 0){
-            
+        if(aux[0].compareTo("newWord") == 0){
+            this.stringToPrint += aux[1];
         }
     }
 }

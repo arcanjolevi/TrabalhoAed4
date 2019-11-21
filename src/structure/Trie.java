@@ -7,13 +7,15 @@ import java.util.ArrayList;
 public class Trie implements Speaker{
     private boolean endOfWord;
     private Trie alphabet[];
+    private String dictionary;
     private ArrayList<Listener> listeners;
     
     //Trie constructor
     public Trie(){
-        this.alphabet  = new Trie[26];
-        this.endOfWord = false;
-        this.listeners = new ArrayList<Listener>();
+        this.alphabet   = new Trie[26];
+        this.endOfWord  = false;
+        this.listeners  = new ArrayList<Listener>();
+        this.dictionary = "";
         this.initTrieVector();
     }
 
@@ -119,31 +121,31 @@ public class Trie implements Speaker{
         }
     }
     
-    /* Method that print all the words on the trie in alphabetic order
-     * Input:        String that contain the word to be printed
+    /* Method that get all the words on the trie in alphabetic order
+     * Input:        String that contain the prefixed word formed until the moment
      * Return:       None
      * Precondition: None
     */
-    private void printDictionary(String prefix){
+    public void getDictionary(String prefix){
         for(int i=0;i<26;i++){
             if(this.isInserted(i) == true){
                 prefix += this.getCharacter(i); //Add one more letter to the word to be printed
                 if(this.getNode(i).endOfWord == true){
-                    //this.speak(prefix + "\n.");
+                    this.speak("newWord,"+prefix + "\n");
                 }
-                this.getNode(i).printDictionary(prefix); //Recursion
+                this.getNode(i).getDictionary(prefix); //Recursion
                 prefix = prefix.substring(0, prefix.length()-1); //clean the already printed word
             }
         }
     }
     
-    /* Method used to initialize the print function
+    /* Method used to initialize the word find function
      * Input:        None
      * Return:       None
      * Precondition: None
     */
-    public void printDictionary(){
-        this.printDictionary("");
+    public void startWordSearch(){
+        this.getDictionary("");
     }
 
     /* Method that subscribe a listener to this class
