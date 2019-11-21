@@ -1,13 +1,13 @@
 package main;
 
-import structure.Trie;
-import file.File;
+import structure.TrieRoot;
+import window.Window;
 
 public class Main {
     public static void main(String[] args) throws Exception{
-        File f = new File();
-        Trie t;
-        t = f.loadWordsFile("/home/caio/Desktop/lucasGay.txt");
-        t.print();
+        TrieRoot t = new TrieRoot();
+        Window w = new Window();
+        w.startWindow();
+        t.getTrie().subscribe(w);
     }
 }

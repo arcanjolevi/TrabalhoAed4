@@ -16,32 +16,44 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import generic.Listener;
 
-public class Window extends JFrame {
-
-	private JPanel contentPane;
-	private JTextField pathToFileTextField;
-	private JTextField textField;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+public class Window extends JFrame implements Listener{
+    
+    private JPanel contentPane;
+    private JTextField pathToFileTextField;
+    private JTextField textFieldPalavraAConsultar;
+    private JPanel superiorPane;
+    private JButton buttonLoadStopWords;
+    private JButton buttonLoadWords;
+    private JPanel pathToFilePane;
+    private JLabel labelPathToFile;
+    private JButton buttonChooseFile;
+    private JPanel inferiorPane;
+    private JPanel screenPane;
+    private JScrollPane scrollPane;
+    private JTextArea screenTextArea;
+    private JPanel buttonsPane;
+    private JLabel labelPalavraAConsultar;
+    private JPanel functionButtonsPane;
+    private JButton buttonConsultar;
+    private JButton buttonImprimirDicionrio;
+    private JButton buttonConsultarSemelhante;
+    private String stringToPrint;
+    private Boolean readyToPrint;
+	
+    public void startWindow() {
+        EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					Window frame = new Window();
 					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				} catch (Exception e) {}
 			}
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
+	//Window constructor
 	public Window() {
 		setBackground(Color.LIGHT_GRAY);
 		setTitle("Árvore Trie");
@@ -58,7 +70,7 @@ public class Window extends JFrame {
 		gbl_contentPane.rowWeights = new double[]{0.0, 1.0, 1.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
-		JPanel superiorPane = new JPanel();
+		superiorPane = new JPanel();
 		superiorPane.setBackground(Color.LIGHT_GRAY);
 		superiorPane.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		GridBagConstraints gbc_superiorPane = new GridBagConstraints();
@@ -74,21 +86,21 @@ public class Window extends JFrame {
 		gbl_superiorPane.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		superiorPane.setLayout(gbl_superiorPane);
 		
-		JButton buttonLoadStopWords = new JButton("Carregar StopWords");
+		buttonLoadStopWords = new JButton("Carregar StopWords");
 		GridBagConstraints gbc_buttonLoadStopWords = new GridBagConstraints();
 		gbc_buttonLoadStopWords.insets = new Insets(0, 0, 5, 5);
 		gbc_buttonLoadStopWords.gridx = 1;
 		gbc_buttonLoadStopWords.gridy = 1;
 		superiorPane.add(buttonLoadStopWords, gbc_buttonLoadStopWords);
 		
-		JButton buttonLoadWords = new JButton("Carregar Palavras");
+		buttonLoadWords = new JButton("Carregar Palavras");
 		GridBagConstraints gbc_buttonLoadWords = new GridBagConstraints();
 		gbc_buttonLoadWords.insets = new Insets(0, 0, 5, 5);
 		gbc_buttonLoadWords.gridx = 1;
 		gbc_buttonLoadWords.gridy = 2;
 		superiorPane.add(buttonLoadWords, gbc_buttonLoadWords);
 		
-		JPanel pathToFilePane = new JPanel();
+		pathToFilePane = new JPanel();
 		pathToFilePane.setBackground(Color.LIGHT_GRAY);
 		GridBagConstraints gbc_pathToFilePane = new GridBagConstraints();
 		gbc_pathToFilePane.insets = new Insets(0, 0, 5, 5);
@@ -103,7 +115,7 @@ public class Window extends JFrame {
 		gbl_pathToFilePane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		pathToFilePane.setLayout(gbl_pathToFilePane);
 		
-		JLabel labelPathToFile = new JLabel("Caminho do Arquivo");
+		labelPathToFile = new JLabel("Caminho do Arquivo");
 		GridBagConstraints gbc_labelPathToFile = new GridBagConstraints();
 		gbc_labelPathToFile.fill = GridBagConstraints.HORIZONTAL;
 		gbc_labelPathToFile.insets = new Insets(0, 0, 5, 5);
@@ -120,14 +132,14 @@ public class Window extends JFrame {
 		pathToFilePane.add(pathToFileTextField, gbc_pathToFileTextField);
 		pathToFileTextField.setColumns(10);
 		
-		JButton buttonChooseFile = new JButton("Escolher Arquivo");
+		buttonChooseFile = new JButton("Escolher Arquivo");
 		GridBagConstraints gbc_buttonChooseFile = new GridBagConstraints();
 		gbc_buttonChooseFile.insets = new Insets(0, 0, 5, 5);
 		gbc_buttonChooseFile.gridx = 2;
 		gbc_buttonChooseFile.gridy = 2;
 		pathToFilePane.add(buttonChooseFile, gbc_buttonChooseFile);
 		
-		JPanel inferiorPane = new JPanel();
+		inferiorPane = new JPanel();
 		inferiorPane.setBackground(Color.LIGHT_GRAY);
 		GridBagConstraints gbc_inferiorPane = new GridBagConstraints();
 		gbc_inferiorPane.insets = new Insets(0, 0, 5, 5);
@@ -142,7 +154,7 @@ public class Window extends JFrame {
 		gbl_inferiorPane.rowWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
 		inferiorPane.setLayout(gbl_inferiorPane);
 		
-		JPanel screenPane = new JPanel();
+		screenPane = new JPanel();
 		screenPane.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		screenPane.setBackground(Color.LIGHT_GRAY);
 		GridBagConstraints gbc_screenPane = new GridBagConstraints();
@@ -158,18 +170,18 @@ public class Window extends JFrame {
 		gbl_screenPane.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		screenPane.setLayout(gbl_screenPane);
 		
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane.gridx = 0;
 		gbc_scrollPane.gridy = 0;
 		screenPane.add(scrollPane, gbc_scrollPane);
 		
-		JTextArea screenTextArea = new JTextArea();
+		screenTextArea = new JTextArea();
 		screenTextArea.setEditable(false);
 		scrollPane.setViewportView(screenTextArea);
 		
-		JPanel buttonsPane = new JPanel();
+		buttonsPane = new JPanel();
 		buttonsPane.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		buttonsPane.setBackground(Color.LIGHT_GRAY);
 		GridBagConstraints gbc_buttonsPane = new GridBagConstraints();
@@ -184,23 +196,23 @@ public class Window extends JFrame {
 		gbl_buttonsPane.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
 		buttonsPane.setLayout(gbl_buttonsPane);
 		
-		JLabel lblPalavraAConsultar = new JLabel("Palavra a consultar");
-		GridBagConstraints gbc_lblPalavraAConsultar = new GridBagConstraints();
-		gbc_lblPalavraAConsultar.insets = new Insets(0, 0, 5, 0);
-		gbc_lblPalavraAConsultar.gridx = 0;
-		gbc_lblPalavraAConsultar.gridy = 0;
-		buttonsPane.add(lblPalavraAConsultar, gbc_lblPalavraAConsultar);
+		labelPalavraAConsultar = new JLabel("Palavra a consultar");
+		GridBagConstraints gbc_labelPalavraAConsultar = new GridBagConstraints();
+		gbc_labelPalavraAConsultar.insets = new Insets(0, 0, 5, 0);
+		gbc_labelPalavraAConsultar.gridx = 0;
+		gbc_labelPalavraAConsultar.gridy = 0;
+		buttonsPane.add(labelPalavraAConsultar, gbc_labelPalavraAConsultar);
 		
-		textField = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.insets = new Insets(0, 0, 5, 0);
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.gridx = 0;
-		gbc_textField.gridy = 1;
-		buttonsPane.add(textField, gbc_textField);
-		textField.setColumns(10);
+		textFieldPalavraAConsultar = new JTextField();
+		GridBagConstraints gbc_textFieldPalavraAConsultar = new GridBagConstraints();
+		gbc_textFieldPalavraAConsultar.insets = new Insets(0, 0, 5, 0);
+		gbc_textFieldPalavraAConsultar.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldPalavraAConsultar.gridx = 0;
+		gbc_textFieldPalavraAConsultar.gridy = 1;
+		buttonsPane.add(textFieldPalavraAConsultar, gbc_textFieldPalavraAConsultar);
+		textFieldPalavraAConsultar.setColumns(10);
 		
-		JPanel functionButtonsPane = new JPanel();
+		functionButtonsPane = new JPanel();
 		functionButtonsPane.setBackground(Color.LIGHT_GRAY);
 		GridBagConstraints gbc_functionButtonsPane = new GridBagConstraints();
 		gbc_functionButtonsPane.fill = GridBagConstraints.BOTH;
@@ -214,29 +226,40 @@ public class Window extends JFrame {
 		gbl_functionButtonsPane.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		functionButtonsPane.setLayout(gbl_functionButtonsPane);
 		
-		JButton btnConsultar = new JButton("Consultar");
-		GridBagConstraints gbc_btnConsultar = new GridBagConstraints();
-		gbc_btnConsultar.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnConsultar.insets = new Insets(0, 0, 5, 5);
-		gbc_btnConsultar.gridx = 1;
-		gbc_btnConsultar.gridy = 1;
-		functionButtonsPane.add(btnConsultar, gbc_btnConsultar);
+		buttonConsultar = new JButton("Consultar");
+		GridBagConstraints gbc_buttonConsultar = new GridBagConstraints();
+		gbc_buttonConsultar.fill = GridBagConstraints.HORIZONTAL;
+		gbc_buttonConsultar.insets = new Insets(0, 0, 5, 5);
+		gbc_buttonConsultar.gridx = 1;
+		gbc_buttonConsultar.gridy = 1;
+		functionButtonsPane.add(buttonConsultar, gbc_buttonConsultar);
 		
-		JButton btnImprimirDicionrio = new JButton("Imprimir Dicionário");
-		GridBagConstraints gbc_btnImprimirDicionrio = new GridBagConstraints();
-		gbc_btnImprimirDicionrio.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnImprimirDicionrio.insets = new Insets(0, 0, 5, 5);
-		gbc_btnImprimirDicionrio.gridx = 2;
-		gbc_btnImprimirDicionrio.gridy = 1;
-		functionButtonsPane.add(btnImprimirDicionrio, gbc_btnImprimirDicionrio);
+		buttonImprimirDicionrio = new JButton("Imprimir Dicionário");
+		GridBagConstraints gbc_buttonImprimirDicionrio = new GridBagConstraints();
+		gbc_buttonImprimirDicionrio.fill = GridBagConstraints.HORIZONTAL;
+		gbc_buttonImprimirDicionrio.insets = new Insets(0, 0, 5, 5);
+		gbc_buttonImprimirDicionrio.gridx = 2;
+		gbc_buttonImprimirDicionrio.gridy = 1;
+		functionButtonsPane.add(buttonImprimirDicionrio, gbc_buttonImprimirDicionrio);
 		
-		JButton btnConsultarSemelhante = new JButton("Consultar Semelhante");
-		GridBagConstraints gbc_btnConsultarSemelhante = new GridBagConstraints();
-		gbc_btnConsultarSemelhante.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnConsultarSemelhante.insets = new Insets(0, 0, 5, 5);
-		gbc_btnConsultarSemelhante.gridx = 3;
-		gbc_btnConsultarSemelhante.gridy = 1;
-		functionButtonsPane.add(btnConsultarSemelhante, gbc_btnConsultarSemelhante);
+		buttonConsultarSemelhante = new JButton("Consultar Semelhante");
+		GridBagConstraints gbc_buttonConsultarSemelhante = new GridBagConstraints();
+		gbc_buttonConsultarSemelhante.fill = GridBagConstraints.HORIZONTAL;
+                gbc_buttonConsultarSemelhante.insets = new Insets(0, 0, 5, 5);
+            gbc_buttonConsultarSemelhante.gridx = 3;
+            gbc_buttonConsultarSemelhante.gridy = 1;
+            functionButtonsPane.add(buttonConsultarSemelhante, gbc_buttonConsultarSemelhante);
+            
+            this.stringToPrint = "";
+            this.readyToPrint  = false;
 	}
 
+    @Override
+    public void listen(String msg) {
+        String aux[] = msg.split(".");
+        
+        if(aux[0].compareTo("printDictionaryStarted.") == 0){
+            
+        }
+    }
 }

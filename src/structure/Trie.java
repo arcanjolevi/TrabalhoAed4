@@ -1,14 +1,19 @@
 package structure;
 
+import generic.*;
+import java.util.ArrayList;
+
 //Class that represents a Trie tree
-public class Trie{
+public class Trie implements Speaker{
     private boolean endOfWord;
     private Trie alphabet[];
+    private ArrayList<Listener> listeners;
     
     //Trie constructor
     public Trie(){
         this.alphabet  = new Trie[26];
         this.endOfWord = false;
+        this.listeners = new ArrayList<Listener>();
         this.initTrieVector();
     }
 
@@ -101,8 +106,13 @@ public class Trie{
             if(this.isInserted(letterToInsert) == true){
                this.getNode(letterToInsert).insert(text.substring(1, text.length())); //Recursion
             }else{
-                this.alphabet[this.getIndex(letterToInsert)] = new Trie();
-                this.getNode(letterToInsert).insert(text.substring(1, text.length())); //Recursion
+                try {
+                    this.alphabet[this.getIndex(letterToInsert)] = new Trie();
+                    this.subscribe(this.listeners, this.alphabet[this.getIndex(letterToInsert)]);
+                    this.getNode(letterToInsert).insert(text.substring(1, text.length())); //Recursion
+                } catch (Exception ex) {
+                    this.speak("error," + ex.getMessage());
+                }
             }
         }else{
             this.endOfWord = true;
@@ -114,14 +124,14 @@ public class Trie{
      * Return:       None
      * Precondition: None
     */
-    private void print(String prefix){
+    private void printDictionary(String prefix){
         for(int i=0;i<26;i++){
             if(this.isInserted(i) == true){
                 prefix += this.getCharacter(i); //Add one more letter to the word to be printed
                 if(this.getNode(i).endOfWord == true){
-                    System.out.println(prefix);
+                    //this.speak(prefix + "\n.");
                 }
-                this.getNode(i).print(prefix); //Recursion
+                this.getNode(i).printDictionary(prefix); //Recursion
                 prefix = prefix.substring(0, prefix.length()-1); //clean the already printed word
             }
         }
@@ -132,8 +142,58 @@ public class Trie{
      * Return:       None
      * Precondition: None
     */
-    public void print(){
-        this.print("");
+    public void printDictionary(){
+        this.printDictionary("");
+    }
+
+    /* Method that subscribe a listener to this class
+     * Input:        Listener to be subscribed
+     * Return:       None
+     * Precondition: None
+    */
+    @Override
+    public void subscribe(Object listener) throws Exception{
+        if(listener instanceof Listener){
+            this.listeners.add((Listener) listener);
+        }else{
+            throw new Exception("A classe não é um listener");
+        }
     }
     
+    /* Method that subscribe a ArrayList of listeners to a Trie node
+     * Input:        ArrayList of listeners and Trie node
+     * Return:       None
+     * Precondition: None
+    */
+    private void subscribe(ArrayList<Listener> listeners, Trie t) throws Exception{
+        for(Listener l:listeners){
+            t.subscribe(l);
+        }
+    }
+
+    /* Method that unscribe a listener from this class
+     * Input:        Listener to be unscribed
+     * Return:       None
+     * Precondition: None
+    */
+    @Override
+    public void unscribe(Object listener) throws Exception{
+        if(listener instanceof Listener){
+            this.listeners.remove((Listener) listener);
+        }else{
+            throw new Exception("A classe não é um listener");
+        }
+    }
+
+    /* Method that send a message to all connected listeners
+     * Input:        Message to be sent
+     * Return:       None
+     * Precondition: None
+    */
+    @Override
+    public void speak(String msg) {
+        for(Listener l:this.listeners){
+            l.listen(msg);
+        }
+    }
 }
