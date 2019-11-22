@@ -2,8 +2,6 @@ package structure;
 
 import generic.*;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 //Class that represents a Trie tree
 public class Trie implements Speaker,Listener{
@@ -221,6 +219,11 @@ public class Trie implements Speaker,Listener{
         }
     }
 
+    /* Method that listen a message from a speaker
+     * Input:        Message listen
+     * Return:       None
+     * Precondition: None
+    */
     @Override
     public void listen(String msg) {
         String aux[] = msg.split(",");
