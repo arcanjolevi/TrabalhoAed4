@@ -17,8 +17,14 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import generic.Listener;
+import generic.Speaker;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
-public class Window extends JFrame implements Listener{
+public class Window extends JFrame implements Listener,Speaker{
     
     private JPanel contentPane;
     private JTextField pathToFileTextField;
@@ -39,22 +45,21 @@ public class Window extends JFrame implements Listener{
     private JButton buttonConsultar;
     private JButton buttonImprimirDicionrio;
     private JButton buttonConsultarSemelhante;
-    public String stringToPrint;
-    private Boolean readyToPrint;
+    private String stringToPrint;
+    private ArrayList<Listener> listeners;
 	
-    public void startWindow() {
-        EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Window frame = new Window();
-					frame.setVisible(true);
-				} catch (Exception e) {}
-			}
-		});
-	}
+    public void startWindow(Object listener) {
+        try {
+            Window frame = new Window();
+            frame.subscribe(listener);
+            frame.setVisible(true);
+        } catch (Exception e) {}
+    }
 
 	//Window constructor
 	public Window() {
+                this.stringToPrint = "";
+                this.listeners     = new ArrayList<Listener>();
 		setBackground(Color.LIGHT_GRAY);
 		setTitle("Árvore Trie");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -232,6 +237,12 @@ public class Window extends JFrame implements Listener{
 		gbc_buttonConsultar.insets = new Insets(0, 0, 5, 5);
 		gbc_buttonConsultar.gridx = 1;
 		gbc_buttonConsultar.gridy = 1;
+                buttonConsultar.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent arg0) {
+                        speak("consultButtonPressed,"+textFieldPalavraAConsultar.getText());
+                    }
+                });
 		functionButtonsPane.add(buttonConsultar, gbc_buttonConsultar);
 		
 		buttonImprimirDicionrio = new JButton("Imprimir Dicionário");
@@ -240,6 +251,12 @@ public class Window extends JFrame implements Listener{
 		gbc_buttonImprimirDicionrio.insets = new Insets(0, 0, 5, 5);
 		gbc_buttonImprimirDicionrio.gridx = 2;
 		gbc_buttonImprimirDicionrio.gridy = 1;
+                buttonImprimirDicionrio.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent arg0) {
+                        speak("printButtonPressed,");
+                    }
+                });
 		functionButtonsPane.add(buttonImprimirDicionrio, gbc_buttonImprimirDicionrio);
 		
 		buttonConsultarSemelhante = new JButton("Consultar Semelhante");
@@ -249,23 +266,57 @@ public class Window extends JFrame implements Listener{
             gbc_buttonConsultarSemelhante.gridx = 3;
             gbc_buttonConsultarSemelhante.gridy = 1;
             functionButtonsPane.add(buttonConsultarSemelhante, gbc_buttonConsultarSemelhante);
-            
-            this.stringToPrint = "";
-            this.readyToPrint  = false;
 	}
-    public void printDerivatedWords(){
-        String aux[] = this.stringToPrint.split("\n");
+        
+    public void printDerivatedWords(String subWord){
+        String aux1[] = this.stringToPrint.split("\n");
+        String aux2 = "";
         int i = 0;
-        for(String a:aux){
+        for(String a:aux1){
             if(i == 10)
                 break;
-            System.out.println(a);
+            aux2 += (i+1) + ":" + a + "\n";
             i++;
         }
+        
+        JFrame aux = new JFrame("Palavras derivadas de "+subWord);
+        aux.setSize(640, 430);
+        aux.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        aux.setLocationRelativeTo(null);
+        
+        scrollPane = new JScrollPane();
+        aux.add(scrollPane, BorderLayout.CENTER);
+        
+        screenTextArea = new JTextArea();
+        screenTextArea.setEditable(false);
+        screenTextArea.setText(aux2);
+        scrollPane.setViewportView(screenTextArea);
+        
+        aux.setVisible(true);
+        aux.setEnabled(true);
+        
+        stringToPrint = "";
     }
         
-    public void printAAAAA(){
-        System.out.println(this.stringToPrint);
+    public void printDictionary(){
+        JOptionPane.showInternalMessageDialog(null, this.stringToPrint);
+        JFrame aux = new JFrame("Dicionário");
+        aux.setSize(640, 430);
+        aux.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        aux.setLocationRelativeTo(null);
+        
+        scrollPane = new JScrollPane();
+        aux.add(scrollPane, BorderLayout.CENTER);
+        
+        screenTextArea = new JTextArea();
+        screenTextArea.setEditable(false);
+        screenTextArea.setText(stringToPrint);
+        scrollPane.setViewportView(screenTextArea);
+        
+        aux.setVisible(true);
+        aux.setEnabled(true);
+        
+        stringToPrint = "";
     }
 
     @Override
@@ -284,8 +335,42 @@ public class Window extends JFrame implements Listener{
             }
         }
         
-        if(aux[0].compareTo("clearStringToPrint") == 0){
-            this.stringToPrint = "";
+        if(aux[0].compareTo("dictionaryEnd") == 0){
+            this.printDictionary();
+        }
+        
+        if(aux[0].compareTo("derivatedWordEnd") == 0){
+            this.printDerivatedWords(aux[1]);
+        }
+    }
+
+    /* Method that subscribe a listener to this class
+     * Input:        Listenter to be subscribed
+     * Return:       None
+     * Precondition: None
+    */
+    @Override
+    public void subscribe(Object listener) throws Exception {
+        if(listener instanceof Listener){
+            this.listeners.add((Listener) listener);
+        }else{
+            throw new Exception("A classe não é um listener");
+        }
+    }
+
+    @Override
+    public void unscribe(Object listener) throws Exception {
+        if(listener instanceof Listener){
+            this.listeners.remove((Listener) listener);
+        }else{
+            throw new Exception("A classe não é um listener");
+        }
+    }
+
+    @Override
+    public void speak(String msg) {
+        for(Listener l:this.listeners){
+            l.listen(msg);
         }
     }
 }

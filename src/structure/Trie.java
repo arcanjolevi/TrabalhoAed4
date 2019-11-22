@@ -2,9 +2,11 @@ package structure;
 
 import generic.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 //Class that represents a Trie tree
-public class Trie implements Speaker{
+public class Trie implements Speaker,Listener{
     private boolean endOfWord;
     private Trie alphabet[];
     private ArrayList<Listener> listeners;
@@ -128,7 +130,7 @@ public class Trie implements Speaker{
      * Return:       None
      * Precondition: None
     */
-    public void getDictionary(String prefix, String speakMsg) throws Exception{
+    public void getDictionary(String prefix, String speakMsg){
         for(int i=0;i<26;i++){
             if(this.isInserted(i) == true){
                 prefix += this.getCharacter(i); //Add one more letter to the word to be printed
@@ -146,9 +148,9 @@ public class Trie implements Speaker{
      * Return:       None
      * Precondition: None
     */
-    public void startWordSearch() throws Exception{
-        this.speak("clearStringToPrint,");
+    public void startWordSearch(){
         this.getDictionary("","newWord,");
+        this.speak("dictionaryEnd,");
     }
     
     /* Method that find and speak out all similar words by a given subWord
@@ -162,8 +164,8 @@ public class Trie implements Speaker{
         for(i=0;aux != null && i<subWord.length();i++)
             aux = aux.getNode(subWord.toCharArray()[i]);
         if(aux == null) throw new Exception("Palavras derivadas a partir de " + subWord + " não existem na árvore");
-        this.speak("clearStringToPrint,");
         aux.getDictionary(subWord,"newDerivatedWord,");
+        this.speak("derivatedWordEnd,"+subWord);
     }
 
     /* Method that subscribe a listener to all trie nodes
@@ -177,7 +179,8 @@ public class Trie implements Speaker{
         if(listener instanceof Listener){
             for(i=0;i<26;i++){
                 if(this.isInserted(i)){
-                    this.listeners.add((Listener) listener);
+                    if(!this.listeners.contains((Listener) listener))
+                        this.listeners.add((Listener) listener);
                     this.getNode(i).subscribe(listener); //Subscribe recursion
                 }
             }
@@ -215,6 +218,21 @@ public class Trie implements Speaker{
     public void speak(String msg) {
         for(Listener l:this.listeners){
             l.listen(msg);
+        }
+    }
+
+    @Override
+    public void listen(String msg) {
+        String aux[] = msg.split(",");
+        
+        if(aux[0].compareTo("printButtonPressed") == 0){
+                this.startWordSearch();
+        }
+        
+        if(aux[0].compareTo("consultButtonPressed") == 0){
+            try {
+                this.getSimilarWords(aux[1]);
+            } catch (Exception ex) {}
         }
     }
 }

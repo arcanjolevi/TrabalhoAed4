@@ -10,10 +10,7 @@ public class Main {
         TrieRoot t = new TrieRoot();
         Window w = new Window();
         t.setTrie(f.loadWordsFile("/home/caio/dictionary"));
+        w.startWindow(t.getTrie());
         t.subscribe(w);
-        t.getTrie().getSimilarWords("a");
-        w.printDerivatedWords();
-//        t.getTrie().startWordSearch(listeners);
-//        w.printAAAAA();
     }
 }
