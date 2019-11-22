@@ -7,7 +7,6 @@ import java.util.ArrayList;
 public class Trie implements Speaker{
     private boolean endOfWord;
     private Trie alphabet[];
-    private String dictionary;
     private ArrayList<Listener> listeners;
     
     //Trie constructor
@@ -15,10 +14,10 @@ public class Trie implements Speaker{
         this.alphabet   = new Trie[26];
         this.endOfWord  = false;
         this.listeners  = new ArrayList<Listener>();
-        this.dictionary = "";
         this.initTrieVector();
     }
     
+    //Listeners getter
     public ArrayList<Listener> getListeners(){
         return this.listeners;
     }
@@ -91,8 +90,8 @@ public class Trie implements Speaker{
     public Boolean isInserted(Character letter){
         return this.getNode(letter) != null;
     }
-
-        /* Verify if a letter is or not in the vector
+    
+    /* Verify if a letter is or not in the vector
      * Input:        Letter to be checked
      * Return:       True if it's in or false otherwise
      * Precondition: The letter must be betwen a and z
@@ -114,7 +113,6 @@ public class Trie implements Speaker{
             }else{
                 try {
                     this.alphabet[this.getIndex(letterToInsert)] = new Trie();
-                    this.subscribe(this.listeners, this.alphabet[this.getIndex(letterToInsert)]);
                     this.getNode(letterToInsert).insert(text.substring(1, text.length())); //Recursion
                 } catch (Exception ex) {
                     this.speak("error," + ex.getMessage());
@@ -130,15 +128,14 @@ public class Trie implements Speaker{
      * Return:       None
      * Precondition: None
     */
-    public void getDictionary(String prefix, ArrayList<Listener> listeners, String speakMsg) throws Exception{
+    public void getDictionary(String prefix, String speakMsg) throws Exception{
         for(int i=0;i<26;i++){
             if(this.isInserted(i) == true){
-                this.subscribe(listeners, this);
                 prefix += this.getCharacter(i); //Add one more letter to the word to be printed
                 if(this.getNode(i).endOfWord == true){
                     this.speak(speakMsg + prefix + "\n");
                 }
-                this.getNode(i).getDictionary(prefix,listeners,speakMsg); //Recursion
+                this.getNode(i).getDictionary(prefix,speakMsg); //Recursion
                 prefix = prefix.substring(0, prefix.length()-1); //clean the already printed word
             }
         }
@@ -149,10 +146,9 @@ public class Trie implements Speaker{
      * Return:       None
      * Precondition: None
     */
-    public void startWordSearch(ArrayList<Listener> listeners) throws Exception{
-        this.subscribe(listeners, this);
+    public void startWordSearch() throws Exception{
         this.speak("clearStringToPrint,");
-        this.getDictionary("",listeners,"newWord,");
+        this.getDictionary("","newWord,");
     }
     
     /* Method that find and speak out all similar words by a given subWord
@@ -160,40 +156,33 @@ public class Trie implements Speaker{
      * Return:       None
      * Precondition: None
     */
-    public void findSimilar(String subWord, ArrayList<Listener> listeners) throws Exception{
+    public void getSimilarWords(String subWord) throws Exception{
         Trie aux = this;
         int i;
-        for(i=0;aux != null && i<subWord.length();i++){
+        for(i=0;aux != null && i<subWord.length();i++)
             aux = aux.getNode(subWord.toCharArray()[i]);
-        }
-        if(aux == null) throw new Exception("Palavras derivadas a partir de " + subWord + " não existem");
-        aux.subscribe(listeners, this);
+        if(aux == null) throw new Exception("Palavras derivadas a partir de " + subWord + " não existem na árvore");
         this.speak("clearStringToPrint,");
-        aux.getDictionary(subWord, listeners, "newDerivatedWord,");
+        aux.getDictionary(subWord,"newDerivatedWord,");
     }
 
-    /* Method that subscribe a listener to this class
+    /* Method that subscribe a listener to all trie nodes
      * Input:        Listener to be subscribed
      * Return:       None
      * Precondition: None
     */
     @Override
     public void subscribe(Object listener) throws Exception{
+        int i;
         if(listener instanceof Listener){
-            this.listeners.add((Listener) listener);
+            for(i=0;i<26;i++){
+                if(this.isInserted(i)){
+                    this.listeners.add((Listener) listener);
+                    this.getNode(i).subscribe(listener); //Subscribe recursion
+                }
+            }
         }else{
             throw new Exception("A classe não é um listener");
-        }
-    }
-    
-    /* Method that subscribe a ArrayList of listeners to a Trie node
-     * Input:        ArrayList of listeners and Trie node
-     * Return:       None
-     * Precondition: None
-    */
-    public void subscribe(ArrayList<Listener> listeners, Trie t) throws Exception{
-        for(Listener l:listeners){
-            t.subscribe(l);
         }
     }
 
@@ -204,8 +193,14 @@ public class Trie implements Speaker{
     */
     @Override
     public void unscribe(Object listener) throws Exception{
+        int i;
         if(listener instanceof Listener){
-            this.listeners.remove((Listener) listener);
+            for(i=0;i<26;i++){
+                if(this.isInserted(i)){
+                    this.listeners.remove((Listener) listener);
+                    this.getNode(i).unscribe(listener); //Unscribe recursion
+                }
+            }
         }else{
             throw new Exception("A classe não é um listener");
         }

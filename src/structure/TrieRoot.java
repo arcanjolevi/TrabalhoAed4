@@ -1,6 +1,6 @@
 package structure;
 
-public class TrieRoot {
+public class TrieRoot{
     private Trie trie;
     
     //TrieRoot constructor
@@ -14,7 +14,7 @@ public class TrieRoot {
     }
     
     //Trie setter
-    public void setTrie(Trie trie){
+    public void setTrie(Trie trie) throws Exception{
         this.trie = trie;
     }
     
@@ -26,5 +26,23 @@ public class TrieRoot {
     public void insert(String text) throws Exception{
         if(text.toLowerCase().compareTo(text) != 0) throw new Exception("Palavra inválida");
         this.trie.insert(text);
+    }
+
+    /* Method that subscribe a listener to this class
+     * Input:        Listener to be subscribed
+     * Return:       None
+     * Precondition: Argument must be a Listener
+    */
+    public void subscribe(Object listener) throws Exception {
+        this.trie.subscribe(listener);
+    }
+    
+    /* Method that unscribe a listener from this class
+     * Input:        Listener to be unscribed
+     * Return:       None
+     * Precondition: Argument must be a Listener
+    */
+    public void unscribe(Object listener) throws Exception {
+        this.trie.unscribe(listener);
     }
 }

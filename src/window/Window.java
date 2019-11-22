@@ -253,6 +253,16 @@ public class Window extends JFrame implements Listener{
             this.stringToPrint = "";
             this.readyToPrint  = false;
 	}
+    public void printDerivatedWords(){
+        String aux[] = this.stringToPrint.split("\n");
+        int i = 0;
+        for(String a:aux){
+            if(i == 10)
+                break;
+            System.out.println(a);
+            i++;
+        }
+    }
         
     public void printAAAAA(){
         System.out.println(this.stringToPrint);
@@ -263,7 +273,19 @@ public class Window extends JFrame implements Listener{
         String aux[] = msg.split(",");
         
         if(aux[0].compareTo("newWord") == 0){
-            this.stringToPrint += aux[1];
+            if(!this.stringToPrint.contains(aux[1])){
+                this.stringToPrint += aux[1];
+            }
+        }
+        
+        if(aux[0].compareTo("newDerivatedWord") == 0){
+            if(!this.stringToPrint.contains(aux[1])){
+                this.stringToPrint += aux[1];
+            }
+        }
+        
+        if(aux[0].compareTo("clearStringToPrint") == 0){
+            this.stringToPrint = "";
         }
     }
 }
