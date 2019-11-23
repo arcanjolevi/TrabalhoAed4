@@ -186,6 +186,12 @@ public class Trie implements Speaker {
         return validNodes > 1;
     }
     
+
+    /* method that checks for nearby tree nodes
+     * Input:        None
+     * Return:       true if it has more node, false otherwise
+     * Precondition: None
+     */
     public boolean checkNextNode() {
     	Trie aux;
     	for (int i = 0; i < 26; i++) {
