@@ -16,6 +16,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -91,6 +94,25 @@ public class Window implements Listener, Speaker {
         gbc_textPathToFile.fill = GridBagConstraints.HORIZONTAL;
         gbc_textPathToFile.gridx = 2;
         gbc_textPathToFile.gridy = 2;
+        textPathToFile.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) { //Processa a palavra contida no campo palavra a processar ao apertar enter no campo
+                if (e.getKeyChar() == 10) {
+                    readWordsFile();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) { //Habilita ou desabilita o botao OK
+                if (textPathToFile.getText().isEmpty()) {
+                    buttonLoadStopWordsFile.setEnabled(false);
+                    buttonLoadWordsFile.setEnabled(false);
+                } else {
+                    buttonLoadStopWordsFile.setEnabled(true);
+                    buttonLoadWordsFile.setEnabled(true);
+                }
+            }
+        });
         panelUp.add(textPathToFile, gbc_textPathToFile);
         textPathToFile.setColumns(10);
 
@@ -339,8 +361,8 @@ public class Window implements Listener, Speaker {
         if (aux[0].compareTo("newWordsFileSuccessfullyRead") == 0) {
             this.successfullyReadFile();
         }
-        
-        if(aux[0].compareTo("errorOnReadingNewWordsFile") == 0){
+
+        if (aux[0].compareTo("errorOnReadingNewWordsFile") == 0) {
             this.errorReadingFile();
         }
     }
