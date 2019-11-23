@@ -288,6 +288,7 @@ public class Window implements Listener, Speaker {
             i++;
         }
         this.showOutPutWindow("Palavras derivadas", derivatedWords);
+        this.stringToPrint = "";
     }
 
     public void printDictionary() {
@@ -299,6 +300,7 @@ public class Window implements Listener, Speaker {
             i++;
         }
         this.showOutPutWindow("Dicionário", derivatedWords);
+        this.stringToPrint = "";
     }
 
     /* Method that listen a message from a speaker
