@@ -168,6 +168,40 @@ public class Trie implements Speaker{
             this.speak("derivatedWordEnd,");   
         }
     }
+    
+    /* method that returns how many positions of the vector are instantiated
+     * Input:        None
+     * Return:       number of positions with instance
+     * Precondition: None
+    */
+    public int checkNo() {
+    	int validNodes = 0;
+    	for(int i=0;i<26;i++) {
+    		if(this.alphabet[i] != null) validNodes++;
+    	}
+    	return validNodes;
+    }
+    
+    /* method that removes words from the tree
+     * Input:        word to be removed
+     * Return:       amount of nonzero positions in vector
+     * Precondition: None
+    */
+    public int stopWords(String word) throws Exception {
+    	if(word.length() != 0) {
+            Character letterToInsert = word.toCharArray()[0];
+            if(this.isInserted(letterToInsert) == true){
+                if(this.getNode(letterToInsert).stopWords(word.substring(1, word.length())) <= 1) {
+                	this.alphabet[this.getIndex(letterToInsert)] = null;
+                	return this.checkNo();
+                }else {
+                	return 2;
+                }
+             }else {
+            	 System.out.println("Palavra não encontrada");
+             }
+    	}return this.checkNo();
+    }
 
     /* Method that subscribe a listener to all trie nodes
      * Input:        Listener to be subscribed
