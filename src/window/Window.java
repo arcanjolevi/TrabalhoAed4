@@ -18,7 +18,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -97,7 +96,7 @@ public class Window implements Listener, Speaker {
         textPathToFile.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) { //Processa a palavra contida no campo palavra a processar ao apertar enter no campo
-                if (e.getKeyChar() == 10) {
+                if (e.getKeyChar() == 10 && !textPathToFile.getText().isEmpty()) {
                     readWordsFile();
                 }
             }
