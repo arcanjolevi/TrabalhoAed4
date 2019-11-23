@@ -37,6 +37,15 @@ public class TrieRoot implements Listener, Speaker {
         }
         this.trie.insert(text);
     }
+    
+    /* remove a word in the trie
+     * Input:        Text to be removed
+     * Return:       None
+     * Precondition: None
+     */
+    public void remove(String Text) throws Exception {
+    	this.trie.stopWords(Text);
+    }
 
     public void readNewWordsFile(String pathToFile) {
         try {
