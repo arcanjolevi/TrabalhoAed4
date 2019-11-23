@@ -112,6 +112,12 @@ public class Window implements Listener, Speaker {
         gbc_buttonLoadWordsFile.insets = new Insets(0, 0, 5, 5);
         gbc_buttonLoadWordsFile.gridx = 2;
         gbc_buttonLoadWordsFile.gridy = 3;
+        buttonLoadWordsFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                readWordsFile();
+            }
+        });
         panelUp.add(buttonLoadWordsFile, gbc_buttonLoadWordsFile);
 
         buttonLoadStopWordsFile = new JButton("Carregar Stop Words");
@@ -200,6 +206,18 @@ public class Window implements Listener, Speaker {
         });
         panelDownButtons.add(buttonPrintDictionary, gbc_buttonPrintDictionary);
         this.window.setVisible(true);
+    }
+
+    public void readWordsFile() {
+        this.speak("buttonReadNewWordsFile," + this.textPathToFile.getText());
+    }
+
+    public void successfullyReadFile() {
+        JOptionPane.showMessageDialog(null, "Arquivo lido com sucesso !", "Mensagem", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void errorReadingFile() {
+        JOptionPane.showMessageDialog(null, "Erro ao ler arquivo !", "Mensagem", JOptionPane.ERROR_MESSAGE);
     }
 
     public void selectFile() {
@@ -306,6 +324,14 @@ public class Window implements Listener, Speaker {
             } else {
                 this.printDerivatedWords();
             }
+        }
+
+        if (aux[0].compareTo("newWordsFileSuccessfullyRead") == 0) {
+            this.successfullyReadFile();
+        }
+        
+        if(aux[0].compareTo("errorOnReadingNewWordsFile") == 0){
+            this.errorReadingFile();
         }
     }
 
