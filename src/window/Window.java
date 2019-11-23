@@ -1,8 +1,6 @@
 package window;
 
 import generic.*;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -19,6 +17,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
@@ -99,6 +99,12 @@ public class Window implements Listener, Speaker {
         gbc_buttonChooseFile.insets = new Insets(0, 0, 5, 5);
         gbc_buttonChooseFile.gridx = 1;
         gbc_buttonChooseFile.gridy = 3;
+        buttonChooseFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                selectFile();
+            }
+        });
         panelUp.add(buttonChooseFile, gbc_buttonChooseFile);
 
         buttonLoadWordsFile = new JButton("Carregar Arquivo de Palavras");
@@ -172,9 +178,10 @@ public class Window implements Listener, Speaker {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 String aux = textSubWordToSearch.getText();
-                if(aux.isEmpty())
+                if (aux.isEmpty()) {
                     aux = "NULL";
-                speak("consultButtonPressed,"+aux);
+                }
+                speak("consultButtonPressed," + aux);
             }
         });
         panelDownButtons.add(buttonConsult, gbc_buttonConsult);
@@ -193,6 +200,21 @@ public class Window implements Listener, Speaker {
         });
         panelDownButtons.add(buttonPrintDictionary, gbc_buttonPrintDictionary);
         this.window.setVisible(true);
+    }
+
+    public void selectFile() {
+        JFileChooser j = new JFileChooser();
+        String aux;
+        j.showOpenDialog(null);
+        try {
+            aux = j.getSelectedFile().getAbsoluteFile().toString();
+            this.textPathToFile.setText(aux);
+            this.buttonLoadWordsFile.setEnabled(true);
+            this.buttonLoadStopWordsFile.setEnabled(true);
+            JOptionPane.showMessageDialog(null, "Arquivo selecionado com sucesso !", "Mensagem", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e2) {
+            JOptionPane.showMessageDialog(null, "Arquivo não selecionado !", "Mensagem", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void showOutPutWindow(String windowName, String msgToPrint) {
@@ -279,9 +301,9 @@ public class Window implements Listener, Speaker {
         }
 
         if (aux[0].compareTo("derivatedWordEnd") == 0) {
-            if(aux.length == 2 && aux[1].compareTo("Não existem paralavras similares") == 0){
+            if (aux.length == 2 && aux[1].compareTo("Não existem paralavras similares") == 0) {
                 this.showOutPutWindow("Palavras derivadas", "Não existem palavras derivadas para a entrada");
-            }else{
+            } else {
                 this.printDerivatedWords();
             }
         }
@@ -306,9 +328,9 @@ public class Window implements Listener, Speaker {
      * Return:       None
      * Precondition: None
      */
-    public void subscribe(ArrayList<Listener> listener){
+    public void subscribe(ArrayList<Listener> listener) {
         for (Listener l : listeners) {
-                this.listeners.add(l);
+            this.listeners.add(l);
         }
     }
 

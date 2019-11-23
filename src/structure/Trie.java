@@ -4,7 +4,7 @@ import generic.*;
 import java.util.ArrayList;
 
 //Class that represents a Trie tree
-public class Trie implements Speaker,Listener{
+public class Trie implements Speaker{
     private boolean endOfWord;
     private Trie alphabet[];
     private ArrayList<Listener> listeners;
@@ -219,28 +219,6 @@ public class Trie implements Speaker,Listener{
     public void speak(String msg) {
         for(Listener l:this.listeners){
             l.listen(msg);
-        }
-    }
-
-    /* Method that listen a message from a speaker
-     * Input:        Message listen
-     * Return:       None
-     * Precondition: None
-    */
-    @Override
-    public void listen(String msg) {
-        String aux[] = msg.split(",");
-        
-        if(aux[0].compareTo("printButtonPressed") == 0){
-                this.startWordSearch();
-        }
-        
-        if(aux[0].compareTo("consultButtonPressed") == 0){
-            if(aux[1].compareTo("NULL") == 0){
-                this.speak("derivatedWordEnd,Não existem paralavras similares");
-            }else{
-                this.getSimilarWords(aux[1]);
-            }
         }
     }
 }
