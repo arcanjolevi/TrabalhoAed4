@@ -156,14 +156,17 @@ public class Trie implements Speaker,Listener{
      * Return:       None
      * Precondition: None
     */
-    public void getSimilarWords(String subWord) throws Exception{
+    public void getSimilarWords(String subWord){
         Trie aux = this;
         int i;
         for(i=0;aux != null && i<subWord.length();i++)
             aux = aux.getNode(subWord.toCharArray()[i]);
-        if(aux == null) throw new Exception("Palavras derivadas a partir de " + subWord + " não existem na árvore");
-        aux.getDictionary(subWord,"newDerivatedWord,");
-        this.speak("derivatedWordEnd,"+subWord);
+        if(aux == null){
+            this.speak("derivatedWordEnd,Não existem paralavras similares");   
+        }else{
+            aux.getDictionary(subWord,"newDerivatedWord,");
+            this.speak("derivatedWordEnd,");   
+        }
     }
 
     /* Method that subscribe a listener to all trie nodes
@@ -233,9 +236,11 @@ public class Trie implements Speaker,Listener{
         }
         
         if(aux[0].compareTo("consultButtonPressed") == 0){
-            try {
+            if(aux[1].compareTo("NULL") == 0){
+                this.speak("derivatedWordEnd,Não existem paralavras similares");
+            }else{
                 this.getSimilarWords(aux[1]);
-            } catch (Exception ex) {}
+            }
         }
     }
 }

@@ -22,8 +22,9 @@ import java.util.ArrayList;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class Window extends JFrame implements Listener,Speaker{
+public class Window implements Listener, Speaker {
 
+    private JFrame window;
     private JPanel contentPane;
     private JTextField textPathToFile;
     private JTextField textSubWordToSearch;
@@ -40,28 +41,19 @@ public class Window extends JFrame implements Listener,Speaker{
     private String stringToPrint;
     private ArrayList<Listener> listeners;
 
-    public void startWindow() {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    Window frame = new Window();
-                    frame.setVisible(true);
-                } catch (Exception e) {}
-            }
-        });
-    }
-
     public Window() {
         this.stringToPrint = "";
-        this.listeners     = new ArrayList<Listener>();
-        
-        setBackground(Color.LIGHT_GRAY);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 641, 311);
+        this.listeners = new ArrayList<Listener>();
+        this.subscribe(listeners);
+        this.window = new JFrame();
+
+        this.window.setBackground(Color.LIGHT_GRAY);
+        this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.window.setBounds(100, 100, 641, 311);
         contentPane = new JPanel();
         contentPane.setBackground(Color.LIGHT_GRAY);
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        setContentPane(contentPane);
+        this.window.setContentPane(contentPane);
         GridBagLayout gbl_contentPane = new GridBagLayout();
         gbl_contentPane.columnWidths = new int[]{0, 0};
         gbl_contentPane.rowHeights = new int[]{46, 12, 56, 0};
@@ -179,7 +171,10 @@ public class Window extends JFrame implements Listener,Speaker{
         buttonConsult.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                speak("consultButtonPressed");
+                String aux = textSubWordToSearch.getText();
+                if(aux.isEmpty())
+                    aux = "NULL";
+                speak("consultButtonPressed,"+aux);
             }
         });
         panelDownButtons.add(buttonConsult, gbc_buttonConsult);
@@ -190,41 +185,50 @@ public class Window extends JFrame implements Listener,Speaker{
         gbc_buttonPrintDictionary.insets = new Insets(0, 0, 5, 5);
         gbc_buttonPrintDictionary.gridx = 2;
         gbc_buttonPrintDictionary.gridy = 1;
+        buttonPrintDictionary.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                speak("printButtonPressed,");
+            }
+        });
         panelDownButtons.add(buttonPrintDictionary, gbc_buttonPrintDictionary);
+        this.window.setVisible(true);
     }
-    
-    public void showOutPutWindow(String windowName, String msgToPrint){
+
+    public void showOutPutWindow(String windowName, String msgToPrint) {
         JFrame showOutput = new JFrame(windowName);
         showOutput.setVisible(true);
         showOutput.setBackground(Color.LIGHT_GRAY);
         showOutput.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         showOutput.setBounds(100, 100, 500, 354);
-        
+        showOutput.setAlwaysOnTop(true);
+
         JPanel ContentPane = new JPanel();
         ContentPane.setBackground(Color.LIGHT_GRAY);
         ContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        
-        showOutput.setContentPane(contentPane);
+
+        showOutput.setContentPane(ContentPane);
         GridBagLayout gbl_contentPane = new GridBagLayout();
         gbl_contentPane.columnWidths = new int[]{0, 0};
         gbl_contentPane.rowHeights = new int[]{0, 0};
         gbl_contentPane.columnWeights = new double[]{1.0, Double.MIN_VALUE};
         gbl_contentPane.rowWeights = new double[]{1.0, Double.MIN_VALUE};
         ContentPane.setLayout(gbl_contentPane);
-        
+
         JScrollPane scrollPane = new JScrollPane();
         GridBagConstraints gbc_scrollPane = new GridBagConstraints();
         gbc_scrollPane.fill = GridBagConstraints.BOTH;
         gbc_scrollPane.gridx = 0;
         gbc_scrollPane.gridy = 0;
         ContentPane.add(scrollPane, gbc_scrollPane);
-        
+
         JTextArea textOutput = new JTextArea();
+        textOutput.setEditable(false);
         textOutput.setText(msgToPrint);
         scrollPane.setViewportView(textOutput);
     }
 
-    public void printDerivatedWords(String subWord) {
+    public void printDerivatedWords() {
         String aux[] = this.stringToPrint.split("\n");
         String derivatedWords = "";
         int i = 0;
@@ -232,14 +236,21 @@ public class Window extends JFrame implements Listener,Speaker{
             if (i == 10) {
                 break;
             }
-            derivatedWords += (i+1) + ":" + a + "\n";
+            derivatedWords += (i + 1) + ":" + a + "\n";
             i++;
         }
         this.showOutPutWindow("Palavras derivadas", derivatedWords);
     }
 
     public void printDictionary() {
-        this.showOutPutWindow("Dicionário", stringToPrint);
+        String aux[] = this.stringToPrint.split("\n");
+        String derivatedWords = "";
+        int i = 0;
+        for (String a : aux) {
+            derivatedWords += (i + 1) + ":" + a + "\n";
+            i++;
+        }
+        this.showOutPutWindow("Dicionário", derivatedWords);
     }
 
     /* Method that listen a message from a speaker
@@ -268,7 +279,11 @@ public class Window extends JFrame implements Listener,Speaker{
         }
 
         if (aux[0].compareTo("derivatedWordEnd") == 0) {
-            this.printDerivatedWords(aux[1]);
+            if(aux.length == 2 && aux[1].compareTo("Não existem paralavras similares") == 0){
+                this.showOutPutWindow("Palavras derivadas", "Não existem palavras derivadas para a entrada");
+            }else{
+                this.printDerivatedWords();
+            }
         }
     }
 
@@ -283,6 +298,17 @@ public class Window extends JFrame implements Listener,Speaker{
             this.listeners.add((Listener) listener);
         } else {
             throw new Exception("A classe não é um listener");
+        }
+    }
+
+    /* Method that subscribe a ArrayList of listener to this class
+     * Input:        Listenter to be subscribed
+     * Return:       None
+     * Precondition: None
+     */
+    public void subscribe(ArrayList<Listener> listener){
+        for (Listener l : listeners) {
+                this.listeners.add(l);
         }
     }
 
