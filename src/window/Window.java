@@ -38,9 +38,15 @@ public class Window implements Listener, Speaker {
     private JPanel panelDown;
     private JLabel labelSubWordToSearch;
     private JPanel panelDownButtons;
-    private JButton buttonConsult;
+    private JButton buttonConsultWord;
     private JButton buttonPrintDictionary;
     private String stringToPrint;
+    private JButton buttonConsultSimilar;
+    private JPanel panelMiddle;
+    private JLabel labelPalavraAConsultar;
+    private JLabel labelDistncia;
+    private JTextField textWordToConsult;
+    private JTextField textDistance;
     private ArrayList<Listener> listeners;
 
     public Window() {
@@ -49,18 +55,20 @@ public class Window implements Listener, Speaker {
         this.subscribe(listeners);
         this.window = new JFrame();
 
+        this.window.setTitle("Trie");
         this.window.setBackground(Color.LIGHT_GRAY);
         this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.window.setBounds(100, 100, 641, 311);
+        this.window.setBounds(100, 100, 703, 384);
         contentPane = new JPanel();
         contentPane.setBackground(Color.LIGHT_GRAY);
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         this.window.setContentPane(contentPane);
+
         GridBagLayout gbl_contentPane = new GridBagLayout();
         gbl_contentPane.columnWidths = new int[]{0, 0};
-        gbl_contentPane.rowHeights = new int[]{46, 12, 56, 0};
+        gbl_contentPane.rowHeights = new int[]{86, 50, 103, 0};
         gbl_contentPane.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-        gbl_contentPane.rowWeights = new double[]{1.0, 0.0, 1.0, Double.MIN_VALUE};
+        gbl_contentPane.rowWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
         contentPane.setLayout(gbl_contentPane);
 
         panelUp = new JPanel();
@@ -72,6 +80,7 @@ public class Window implements Listener, Speaker {
         gbc_panelUp.gridx = 0;
         gbc_panelUp.gridy = 0;
         contentPane.add(panelUp, gbc_panelUp);
+
         GridBagLayout gbl_panelUp = new GridBagLayout();
         gbl_panelUp.columnWidths = new int[]{5, 0, 0, 0, 5, 0};
         gbl_panelUp.rowHeights = new int[]{5, 0, 0, 0, 5, 0};
@@ -148,7 +157,75 @@ public class Window implements Listener, Speaker {
         gbc_buttonLoadStopWordsFile.gridx = 3;
         gbc_buttonLoadStopWordsFile.gridy = 3;
         buttonLoadStopWordsFile.setEnabled(false);
+        buttonLoadStopWordsFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                readStopWordsFile();
+            }
+        });
         panelUp.add(buttonLoadStopWordsFile, gbc_buttonLoadStopWordsFile);
+
+        panelMiddle = new JPanel();
+        panelMiddle.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+        panelMiddle.setBackground(Color.LIGHT_GRAY);
+        GridBagConstraints gbc_panelMiddle = new GridBagConstraints();
+        gbc_panelMiddle.insets = new Insets(0, 0, 5, 0);
+        gbc_panelMiddle.fill = GridBagConstraints.BOTH;
+        gbc_panelMiddle.gridx = 0;
+        gbc_panelMiddle.gridy = 1;
+        contentPane.add(panelMiddle, gbc_panelMiddle);
+        GridBagLayout gbl_panelMiddle = new GridBagLayout();
+        gbl_panelMiddle.columnWidths = new int[]{5, 259, 0, 193, 5, 0};
+        gbl_panelMiddle.rowHeights = new int[]{5, 0, 5, 0};
+        gbl_panelMiddle.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_panelMiddle.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+        panelMiddle.setLayout(gbl_panelMiddle);
+
+        labelPalavraAConsultar = new JLabel("Palavra a consultar");
+        GridBagConstraints gbc_labelPalavraAConsultar = new GridBagConstraints();
+        gbc_labelPalavraAConsultar.insets = new Insets(0, 0, 5, 5);
+        gbc_labelPalavraAConsultar.gridx = 1;
+        gbc_labelPalavraAConsultar.gridy = 1;
+        panelMiddle.add(labelPalavraAConsultar, gbc_labelPalavraAConsultar);
+
+        labelDistncia = new JLabel("Distância");
+        GridBagConstraints gbc_labelDistncia = new GridBagConstraints();
+        gbc_labelDistncia.insets = new Insets(0, 0, 5, 5);
+        gbc_labelDistncia.gridx = 2;
+        gbc_labelDistncia.gridy = 1;
+        panelMiddle.add(labelDistncia, gbc_labelDistncia);
+
+        textWordToConsult = new JTextField();
+        GridBagConstraints gbc_textWordToConsult = new GridBagConstraints();
+        gbc_textWordToConsult.insets = new Insets(0, 0, 0, 5);
+        gbc_textWordToConsult.fill = GridBagConstraints.HORIZONTAL;
+        gbc_textWordToConsult.gridx = 1;
+        gbc_textWordToConsult.gridy = 2;
+        panelMiddle.add(textWordToConsult, gbc_textWordToConsult);
+        textWordToConsult.setColumns(10);
+
+        textDistance = new JTextField();
+        GridBagConstraints gbc_textDistance = new GridBagConstraints();
+        gbc_textDistance.insets = new Insets(0, 0, 0, 5);
+        gbc_textDistance.fill = GridBagConstraints.HORIZONTAL;
+        gbc_textDistance.gridx = 2;
+        gbc_textDistance.gridy = 2;
+        panelMiddle.add(textDistance, gbc_textDistance);
+        textDistance.setColumns(10);
+
+        buttonConsultSimilar = new JButton("Consultar Semelhante");
+        GridBagConstraints gbc_buttonConsultSimilar = new GridBagConstraints();
+        gbc_buttonConsultSimilar.insets = new Insets(0, 0, 0, 5);
+        gbc_buttonConsultSimilar.gridx = 3;
+        gbc_buttonConsultSimilar.gridy = 2;
+        panelMiddle.add(buttonConsultSimilar, gbc_buttonConsultSimilar);
+        buttonConsultSimilar.setEnabled(false);
+        buttonConsultSimilar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                speak("buttonConsultSimilarWords," + textWordToConsult.getText() + "," + textDistance.getText());
+            }
+        });
 
         panelDown = new JPanel();
         panelDown.setBackground(Color.LIGHT_GRAY);
@@ -191,19 +268,19 @@ public class Window implements Listener, Speaker {
         gbc_panelDownButtons.gridy = 3;
         panelDown.add(panelDownButtons, gbc_panelDownButtons);
         GridBagLayout gbl_panelDownButtons = new GridBagLayout();
-        gbl_panelDownButtons.columnWidths = new int[]{5, 0, 0, 5, 0};
+        gbl_panelDownButtons.columnWidths = new int[]{5, 0, 0, 0, 5, 0};
         gbl_panelDownButtons.rowHeights = new int[]{5, 0, 5, 0};
-        gbl_panelDownButtons.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0, Double.MIN_VALUE};
+        gbl_panelDownButtons.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
         gbl_panelDownButtons.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
         panelDownButtons.setLayout(gbl_panelDownButtons);
 
-        buttonConsult = new JButton("Consultar Semelhante");
-        GridBagConstraints gbc_buttonConsult = new GridBagConstraints();
-        gbc_buttonConsult.fill = GridBagConstraints.BOTH;
-        gbc_buttonConsult.insets = new Insets(0, 0, 5, 5);
-        gbc_buttonConsult.gridx = 1;
-        gbc_buttonConsult.gridy = 1;
-        buttonConsult.addActionListener(new ActionListener() {
+        buttonConsultWord = new JButton("Consultar Palavra");
+        GridBagConstraints gbc_buttonConsultWord = new GridBagConstraints();
+        gbc_buttonConsultWord.fill = GridBagConstraints.BOTH;
+        gbc_buttonConsultWord.insets = new Insets(0, 0, 5, 5);
+        gbc_buttonConsultWord.gridx = 1;
+        gbc_buttonConsultWord.gridy = 1;
+        buttonConsultWord.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 String aux = textSubWordToSearch.getText();
@@ -213,8 +290,8 @@ public class Window implements Listener, Speaker {
                 speak("consultButtonPressed," + aux);
             }
         });
-        buttonConsult.setEnabled(false);
-        panelDownButtons.add(buttonConsult, gbc_buttonConsult);
+        buttonConsultWord.setEnabled(false);
+        panelDownButtons.add(buttonConsultWord, gbc_buttonConsultWord);
 
         buttonPrintDictionary = new JButton("Imprimir Dicionário");
         GridBagConstraints gbc_buttonPrintDictionary = new GridBagConstraints();
@@ -230,7 +307,24 @@ public class Window implements Listener, Speaker {
         });
         buttonPrintDictionary.setEnabled(false);
         panelDownButtons.add(buttonPrintDictionary, gbc_buttonPrintDictionary);
+
         this.window.setVisible(true);
+    }
+
+    public void printSimilarWords() {
+        String aux[] = this.stringToPrint.split("\n");
+        String derivatedWords = "";
+        int i = 0;
+        for (String a : aux) {
+            derivatedWords += (i + 1) + ":" + a + "\n";
+            i++;
+        }
+        this.showOutPutWindow("Palavras Semelhantes", derivatedWords);
+        this.stringToPrint = "";
+    }
+
+    public void readStopWordsFile() {
+        this.speak("buttonReadNewStopWordsFile," + this.textPathToFile.getText());
     }
 
     public void readWordsFile() {
@@ -239,8 +333,9 @@ public class Window implements Listener, Speaker {
 
     public void successfullyReadFile() {
         JOptionPane.showMessageDialog(null, "Arquivo lido com sucesso !", "Mensagem", JOptionPane.INFORMATION_MESSAGE);
-        this.buttonConsult.setEnabled(true);
+        this.buttonConsultWord.setEnabled(true);
         this.buttonPrintDictionary.setEnabled(true);
+        this.buttonConsultSimilar.setEnabled(true);
     }
 
     public void errorReadingFile() {
@@ -363,6 +458,24 @@ public class Window implements Listener, Speaker {
 
         if (aux[0].compareTo("errorOnReadingNewWordsFile") == 0) {
             this.errorReadingFile();
+        }
+
+        if (aux[0].compareTo("newStopWordsFileSuccessfullyRead") == 0) {
+            this.successfullyReadFile();
+        }
+
+        if (aux[0].compareTo("errorOnReadingNewStopWordsFile") == 0) {
+            this.errorReadingFile();
+        }
+
+        if (aux[0].compareTo("newSimilarWord") == 0) {
+            if (!this.stringToPrint.contains(aux[1])) {
+                this.stringToPrint += aux[1];
+            }
+        }
+
+        if (aux[0].compareTo("similarWordEnd") == 0) {
+            this.printSimilarWords();
         }
     }
 

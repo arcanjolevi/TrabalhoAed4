@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import file.File;
 
 public class TrieRoot implements Listener, Speaker {
+
     private Trie trie;
     private File file;
     private ArrayList<Listener> listeners;
@@ -37,14 +38,26 @@ public class TrieRoot implements Listener, Speaker {
         }
         this.trie.insert(text);
     }
-    
+
     /* remove a word in the trie
      * Input:        Text to be removed
      * Return:       None
      * Precondition: None
      */
-    public void remove(String Text) throws Exception {
-    	this.trie.stopWords(Text);
+    public void remove(String Text) {
+        this.trie.stopWords(Text);
+    }
+
+    public void readNewStopWordsFile(String pathToFile) {
+        try {
+            this.trie = this.file.loadStopWordsFile(pathToFile, this).getTrie();
+            for (Listener l : this.listeners) {
+                this.trie.subscribe(l);
+            }
+            this.speak("newStopWordsFileSuccessfullyRead,");
+        } catch (Exception ex) {
+            this.speak("errorOnReadingNewStopWordsFile,");
+        }
     }
 
     public void readNewWordsFile(String pathToFile) {
@@ -97,6 +110,10 @@ public class TrieRoot implements Listener, Speaker {
             this.readNewWordsFile(aux[1]);
         }
 
+        if (aux[0].compareTo("buttonReadNewStopWordsFile") == 0) {
+            this.readNewStopWordsFile(aux[1]);
+        }
+
         if (aux[0].compareTo("printButtonPressed") == 0) {
             this.trie.startWordSearch();
         }
@@ -108,6 +125,12 @@ public class TrieRoot implements Listener, Speaker {
                 this.trie.getSimilarWords(aux[1]);
             }
         }
+        
+        if(aux[0].compareTo("buttonConsultSimilarWords") == 0){
+            this.trie.consultSimilar(aux[1], Integer.parseInt(aux[2]), "", "newSimilarWord,");
+            this.speak("similarWordEnd,");
+        }
+
     }
 
     @Override
