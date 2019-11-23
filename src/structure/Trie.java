@@ -173,17 +173,30 @@ public class Trie implements Speaker {
 
     /* method that returns how many positions of the vector are instantiated
      * Input:        None
-     * Return:       number of positions with instance
+     * Return:       true if you have more than one instance false otherwise
      * Precondition: None
      */
-    public int checkNo() {
+     public boolean checkNo() {
         int validNodes = 0;
         for (int i = 0; i < 26; i++) {
             if (this.alphabet[i] != null) {
                 validNodes++;
             }
         }
-        return validNodes;
+        return validNodes > 1;
+    }
+    
+    public boolean checkNextNode() {
+    	Trie aux;
+    	for (int i = 0; i < 26; i++) {
+            if (this.alphabet[i] != null) {
+                aux = this.getNode(this.getCharacter(i));
+                if(aux.checkNo()) {
+                	return true;
+                }
+            }
+        }
+    	return false;
     }
 
     /* method that removes words from the tree
@@ -191,18 +204,20 @@ public class Trie implements Speaker {
      * Return:       amount of nonzero positions in vector
      * Precondition: None
      */
-    public int stopWords(String word){
+    public boolean stopWords(String word){
         if (word.length() != 0) {
             Character letterToInsert = word.toCharArray()[0];
             if (this.isInserted(letterToInsert) == true) {
-                if (this.getNode(letterToInsert).stopWords(word.substring(1, word.length())) <= 1) {
+                if (this.getNode(letterToInsert).stopWords(word.substring(1, word.length())) ) {
                     this.alphabet[this.getIndex(letterToInsert)] = null;
                     return this.checkNo();
-                } else {
-                    return 2;
-                }
+                }else
+                    return false;
             }
-        }
+        }else 
+        	this.endOfWord = false;
+        	if(this.checkNo())
+        		return this.checkNextNode();
         return this.checkNo();
     }
 
