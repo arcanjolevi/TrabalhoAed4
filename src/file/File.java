@@ -36,20 +36,21 @@ public class File {
         return trie;
     }
     
-    /* Method that load the stopwords file and remove them from the dictionary
-     * Input         File path to be loaded
-     * Return:       None
-     * PreCondition: None
+    * Method that load the stopwords file and remove them from the dictionary
+     * Input         File path to be loaded and trie tree root
+     * Return:       tree root with words removed
+     * PreCondition: root not null
      */
-    public void loadStopWordsFile(String filePath) throws Exception{
+    public TrieRoot loadStopWordsFile(String filePath,TrieRoot trie) throws Exception{
         FileReader Read = new FileReader(filePath);
         BufferedReader ReadFile = new BufferedReader(Read);
         String Line = ReadFile.readLine();
         while(Line != null) {
         	Line = Line.toLowerCase();
-//			remove();
+        	trie.remove(Line);
         	Line = ReadFile.readLine();        	
         }
         ReadFile.close();
+        return trie;
     }
 }
