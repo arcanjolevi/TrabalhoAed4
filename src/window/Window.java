@@ -118,6 +118,7 @@ public class Window implements Listener, Speaker {
                 readWordsFile();
             }
         });
+        buttonLoadWordsFile.setEnabled(false);
         panelUp.add(buttonLoadWordsFile, gbc_buttonLoadWordsFile);
 
         buttonLoadStopWordsFile = new JButton("Carregar Stop Words");
@@ -125,6 +126,7 @@ public class Window implements Listener, Speaker {
         gbc_buttonLoadStopWordsFile.insets = new Insets(0, 0, 5, 5);
         gbc_buttonLoadStopWordsFile.gridx = 3;
         gbc_buttonLoadStopWordsFile.gridy = 3;
+        buttonLoadStopWordsFile.setEnabled(false);
         panelUp.add(buttonLoadStopWordsFile, gbc_buttonLoadStopWordsFile);
 
         panelDown = new JPanel();
@@ -190,6 +192,7 @@ public class Window implements Listener, Speaker {
                 speak("consultButtonPressed," + aux);
             }
         });
+        buttonConsult.setEnabled(false);
         panelDownButtons.add(buttonConsult, gbc_buttonConsult);
 
         buttonPrintDictionary = new JButton("Imprimir Dicionário");
@@ -204,6 +207,7 @@ public class Window implements Listener, Speaker {
                 speak("printButtonPressed,");
             }
         });
+        buttonPrintDictionary.setEnabled(false);
         panelDownButtons.add(buttonPrintDictionary, gbc_buttonPrintDictionary);
         this.window.setVisible(true);
     }
@@ -214,6 +218,8 @@ public class Window implements Listener, Speaker {
 
     public void successfullyReadFile() {
         JOptionPane.showMessageDialog(null, "Arquivo lido com sucesso !", "Mensagem", JOptionPane.INFORMATION_MESSAGE);
+        this.buttonConsult.setEnabled(true);
+        this.buttonPrintDictionary.setEnabled(true);
     }
 
     public void errorReadingFile() {
@@ -230,6 +236,8 @@ public class Window implements Listener, Speaker {
             this.buttonLoadWordsFile.setEnabled(true);
             this.buttonLoadStopWordsFile.setEnabled(true);
             JOptionPane.showMessageDialog(null, "Arquivo selecionado com sucesso !", "Mensagem", JOptionPane.INFORMATION_MESSAGE);
+            this.buttonLoadWordsFile.setEnabled(true);
+            this.buttonLoadStopWordsFile.setEnabled(true);
         } catch (Exception e2) {
             JOptionPane.showMessageDialog(null, "Arquivo não selecionado !", "Mensagem", JOptionPane.ERROR_MESSAGE);
         }
