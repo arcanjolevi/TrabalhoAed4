@@ -4,6 +4,7 @@ import generic.*;
 import java.util.ArrayList;
 import file.File;
 
+//Class that represent the trie root
 public class TrieRoot implements Listener, Speaker {
 
     private Trie trie;
@@ -48,6 +49,11 @@ public class TrieRoot implements Listener, Speaker {
         this.trie.stopWords(Text);
     }
 
+    /* Method that read and load a new stopWords file to the trie
+     * Input:        Path to the file to be read
+     * Return:       None
+     * Precondition: None
+    */
     public void readNewStopWordsFile(String pathToFile) {
         try {
             this.trie = this.file.loadStopWordsFile(pathToFile, this).getTrie();
@@ -59,7 +65,12 @@ public class TrieRoot implements Listener, Speaker {
             this.speak("errorOnReadingNewStopWordsFile,");
         }
     }
-
+    
+    /* Method that read and load a new words file to the trie
+     * Input:        Path to the file to be read
+     * Return:       None
+     * Precondition: None
+    */
     public void readNewWordsFile(String pathToFile) {
         try {
             this.trie = this.file.loadWordsFile(pathToFile); //Load new trie
@@ -102,6 +113,11 @@ public class TrieRoot implements Listener, Speaker {
         }
     }
 
+    /* Method that listen to a message from a speaker
+     * Input:        Message listen
+     * Return:       None
+     * Precondition: None
+    */
     @Override
     public void listen(String msg) {
         String aux[] = msg.split(",");
@@ -134,6 +150,11 @@ public class TrieRoot implements Listener, Speaker {
 
     }
 
+    /* Method that speak a message to all connected listeners
+     * Input:        Message to speak
+     * Return:       None
+     * Precondition: None
+    */
     @Override
     public void speak(String msg) {
         for (Listener l : this.listeners) {
