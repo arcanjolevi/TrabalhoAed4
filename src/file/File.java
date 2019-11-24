@@ -65,8 +65,11 @@ public class File {
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String line = bufferedReader.readLine();
         while (line != null) {
-            line = line.toLowerCase();
-            trie.remove(line);
+        	line = this.removeWhiteSpace(line);
+        	if (this.WordCheck(line) == true) {
+        		line = line.toLowerCase();
+            	trie.remove(line);
+        	}
             line = bufferedReader.readLine();
         }
         bufferedReader.close();
