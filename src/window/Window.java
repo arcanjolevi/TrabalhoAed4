@@ -64,6 +64,7 @@ public class Window implements Listener, Speaker {
         this.contentPane.setBackground(Color.LIGHT_GRAY);
         this.contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         this.window.setContentPane(this.contentPane);
+        this.window.setLocationRelativeTo(null);
 
         GridBagLayout gbl_contentPane = new GridBagLayout();
         gbl_contentPane.columnWidths = new int[]{0, 0};
@@ -400,6 +401,7 @@ public class Window implements Listener, Speaker {
         showOutput.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         showOutput.setBounds(100, 100, 500, 354);
         showOutput.setAlwaysOnTop(true);
+        showOutput.setLocationRelativeTo(null);
 
         JPanel ContentPane = new JPanel();
         ContentPane.setBackground(Color.LIGHT_GRAY);
