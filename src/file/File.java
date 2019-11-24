@@ -6,7 +6,7 @@ import structure.*;
 
 //Class that manipulates a file
 public class File {
-    /* Method that check if the word is a valid word
+    /* Method that check if the word is a valid one
      * Input:        Word to be checked
      * Return:       True if it's a valid word or false otherwise
      * Precondition: None
@@ -15,11 +15,11 @@ public class File {
     	return line.matches("[A-Za-z]+");
     }
     
-    /**
+    /*
      * Method that removes blank spaces in string
-     * Entrada:      None
-     * Retorno:      String without spaces 
-     * Pre-condicao: None
+     * Input:        None
+     * Return:       String without spaces 
+     * Precondition: None
      */
     public String removeWhiteSpace(String str) {
     	int i;
@@ -34,7 +34,7 @@ public class File {
     /* Method that load the file with the strings to be added to the tree
      * Input:        File path to be loaded
      * Return:       Trie class filled with the read words
-     * PreCondition: None
+     * Precondition: None
      */
     public Trie loadWordsFile(String filePath) throws Exception{
         Trie trie = new Trie();
@@ -56,9 +56,9 @@ public class File {
     /* Method that load the stopwords file and remove them from the dictionary
      * Input         File path to be loaded and trie tree root
      * Return:       tree root with words removed
-     * PreCondition: root not null
+     * Precondition: root not null
      */
-    public TrieRoot loadStopWordsFile(String filePath,TrieRoot trie) throws Exception{
+    public TrieRoot loadStopWordsFile(String filePath, TrieRoot trie) throws Exception{
         FileReader Read = new FileReader(filePath);
         BufferedReader ReadFile = new BufferedReader(Read);
         String Line = ReadFile.readLine();
