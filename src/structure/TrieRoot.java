@@ -14,8 +14,8 @@ public class TrieRoot implements Listener, Speaker {
     //TrieRoot constructor
     public TrieRoot() {
         this.trie = new Trie();
-        this.listeners = new ArrayList<Listener>();
         this.file = new File();
+        this.listeners = new ArrayList<Listener>();
     }
 
     //Trie getter
@@ -41,7 +41,7 @@ public class TrieRoot implements Listener, Speaker {
     }
 
     /* remove a word in the trie
-     * Input:        Text to be removed
+     * Input:        Word to be removed
      * Return:       None
      * Precondition: None
      */

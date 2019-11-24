@@ -170,9 +170,9 @@ public class Trie implements Speaker {
         }
     }
 
-    /* method that returns how many positions of the vector are instantiated
+    /* Method that returns how many positions of the vector are instantiated
      * Input:        None
-     * Return:       true if you have more than one instance false otherwise
+     * Return:       true if there is more than one instance or false otherwise
      * Precondition: None
      */
     public boolean checkNode() {
@@ -184,9 +184,9 @@ public class Trie implements Speaker {
         }
         return validNodes > 1;
     }
-    /* method that check if there are any valid nodes
+    /* Method that check if there are any valid nodes
      * Input:        None
-     * Return:       Returns true if any are instantiated, false otherwise
+     * Return:       Returns true if any is instantiated or false otherwise
      * Precondition: None
      */
     public boolean checkValidNode() {
@@ -198,9 +198,9 @@ public class Trie implements Speaker {
         return false;
     }
 
-    /* method that checks for nearby tree nodes
+    /* Method that checks if there are next nodes from this node
      * Input:        None
-     * Return:       true if it has more node, false otherwise
+     * Return:       True if it has one or more nodes and False otherwise
      * Precondition: None
      */
     public boolean checkNextNode() {
@@ -216,9 +216,9 @@ public class Trie implements Speaker {
         return false;
     }
 
-    /* method that removes words from the tree
-     * Input:        word to be removed
-     * Return:       amount of nonzero positions in vector
+    /* Method that remove words from the tree
+     * Input:        Word to be removed
+     * Return:       Amount of nonzero positions in vector
      * Precondition: None
      */
     public boolean stopWords(String word) {
@@ -238,9 +238,9 @@ public class Trie implements Speaker {
         return this.checkNode();
     }
 
-    /* method that checks whether the word is similar to the input word within the stipulated distance
+    /* Method that checks whether the word is similar to the input word within the stipulated distance
      * Input:        String with the main word, string with the word to be tested, and the stipulated distance
-     * Return:       true if they look alike if not false
+     * Return:       True if they look alike and if not false
      * Precondition: None
      */
     public boolean CheckSimilarity(String wordMain, String wordBeingTested, int distancFromWords) {
