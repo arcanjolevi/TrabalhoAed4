@@ -148,8 +148,7 @@ public class Trie implements Speaker {
      * Precondition: None
      */
     public void startWordSearch() {
-        this.getDictionary("", "newWord,");
-        this.speak("dictionaryEnd,");
+        this.getDictionary("", "newDictionaryWord,");
     }
 
     /* Method that find and speak out all similar words by a given subWord
@@ -164,10 +163,10 @@ public class Trie implements Speaker {
             aux = aux.getNode(subWord.toCharArray()[i]);
         }
         if (aux == null) {
-            this.speak("derivatedWordEnd,Não existem paralavras similares");
+            this.speak("derivatedWordPrintEnded,Não existem paralavras similares");
         } else {
             aux.getDictionary(subWord, "newDerivatedWord,");
-            this.speak("derivatedWordEnd,");
+            this.speak("derivatedWordPrintEnded,");
         }
     }
 

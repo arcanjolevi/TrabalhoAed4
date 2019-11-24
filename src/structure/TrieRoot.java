@@ -106,29 +106,30 @@ public class TrieRoot implements Listener, Speaker {
     public void listen(String msg) {
         String aux[] = msg.split(",");
 
-        if (aux[0].compareTo("buttonReadNewWordsFile") == 0) {
+        if (aux[0].compareTo("buttonReadNewWordsFileClicked") == 0) {
             this.readNewWordsFile(aux[1]);
         }
 
-        if (aux[0].compareTo("buttonReadNewStopWordsFile") == 0) {
+        else if (aux[0].compareTo("buttonReadNewStopWordsFileClicked") == 0) {
             this.readNewStopWordsFile(aux[1]);
         }
 
-        if (aux[0].compareTo("printButtonPressed") == 0) {
+        else if (aux[0].compareTo("buttonPrintDictionaryClicked") == 0) {
             this.trie.startWordSearch();
+            this.speak("dictionaryPrintEnded,");
         }
 
-        if (aux[0].compareTo("consultButtonPressed") == 0) {
+        else if (aux[0].compareTo("buttonConsultWordClicked") == 0) {
             if (aux[1].compareTo("NULL") == 0) {
-                this.speak("derivatedWordEnd,Não existem paralavras similares");
+                this.speak("derivatedWordPrintEnded,Não existem paralavras similares");
             } else {
                 this.trie.getSimilarWords(aux[1]);
             }
         }
         
-        if(aux[0].compareTo("buttonConsultSimilarWords") == 0){
+        else if(aux[0].compareTo("buttonConsultSimilarWordsClicked") == 0){
             this.trie.consultSimilar(aux[1], Integer.parseInt(aux[2]), "", "newSimilarWord,");
-            this.speak("similarWordEnd,");
+            this.speak("similarWordPrintEnded,");
         }
 
     }

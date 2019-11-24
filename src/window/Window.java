@@ -224,7 +224,7 @@ public class Window implements Listener, Speaker {
         buttonConsultSimilar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) { //Consult similar words when the button is pressed
-                speak("buttonConsultSimilarWords," + textWordToConsult.getText() + "," + textDistance.getText());
+                speak("buttonConsultSimilarWordsClicked," + textWordToConsult.getText() + "," + textDistance.getText());
             }
         });
 
@@ -288,7 +288,7 @@ public class Window implements Listener, Speaker {
                 if (aux.isEmpty()) {
                     aux = "NULL";
                 }
-                speak("consultButtonPressed," + aux);
+                speak("buttonConsultWordClicked," + aux);
             }
         });
         buttonConsultWord.setEnabled(false);
@@ -303,7 +303,7 @@ public class Window implements Listener, Speaker {
         buttonPrintDictionary.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) { //Print the dictionary when the button is pressed
-                speak("printButtonPressed,");
+                speak("buttonPrintDictionaryClicked,");
             }
         });
         buttonPrintDictionary.setEnabled(false);
@@ -335,7 +335,7 @@ public class Window implements Listener, Speaker {
      * Precondition: None
     */
     private void readStopWordsFile() {
-        this.speak("buttonReadNewStopWordsFile," + this.textPathToFile.getText());
+        this.speak("buttonReadNewStopWordsFileClicked," + this.textPathToFile.getText());
     }
     
     /* Method that read a new WordsFile
@@ -344,7 +344,7 @@ public class Window implements Listener, Speaker {
      * Precondition: None
     */
     private void readWordsFile() {
-        this.speak("buttonReadNewWordsFile," + this.textPathToFile.getText());
+        this.speak("buttonReadNewWordsFileClicked," + this.textPathToFile.getText());
     }
     
     /* Method that confirm a succeffuly read of a new file
@@ -383,8 +383,6 @@ public class Window implements Listener, Speaker {
             this.buttonLoadWordsFile.setEnabled(true);
             this.buttonLoadStopWordsFile.setEnabled(true);
             JOptionPane.showMessageDialog(null, "Arquivo selecionado com sucesso !", "Mensagem", JOptionPane.INFORMATION_MESSAGE);
-            this.buttonLoadWordsFile.setEnabled(true);
-            this.buttonLoadStopWordsFile.setEnabled(true);
         } catch (Exception e2) {
             JOptionPane.showMessageDialog(null, "Arquivo não selecionado !", "Mensagem", JOptionPane.ERROR_MESSAGE);
         }
@@ -462,7 +460,7 @@ public class Window implements Listener, Speaker {
             i++;
         }
         if(derivatedWords.isEmpty())
-            derivatedWords = "a";
+            derivatedWords = "";
         this.showOutPutWindow("Dicionário", derivatedWords);
         this.stringToPrint = "";
     }
@@ -476,7 +474,7 @@ public class Window implements Listener, Speaker {
     public void listen(String msg) {
         String aux[] = msg.split(",");
 
-        if (aux[0].compareTo("newWord") == 0) {
+        if (aux[0].compareTo("newDictionaryWord") == 0) {
             if (!this.stringToPrint.contains(aux[1])) {
                 this.stringToPrint += aux[1];
             }
@@ -487,11 +485,11 @@ public class Window implements Listener, Speaker {
             }
         }
 
-        else if (aux[0].compareTo("dictionaryEnd") == 0) {
+        else if (aux[0].compareTo("dictionaryPrintEnded") == 0) {
             this.printDictionary();
         }
 
-        else if (aux[0].compareTo("derivatedWordEnd") == 0) {
+        else if (aux[0].compareTo("derivatedWordPrintEnded") == 0) {
             if (aux.length == 2 && aux[1].compareTo("Não existem paralavras similares") == 0) {
                 this.showOutPutWindow("Palavras derivadas", "Não existem palavras derivadas para a entrada");
             } else {
@@ -521,7 +519,7 @@ public class Window implements Listener, Speaker {
             }
         }
 
-        else if (aux[0].compareTo("similarWordEnd") == 0) {
+        else if (aux[0].compareTo("similarWordPrintEnded") == 0) {
             this.printSimilarWords();
         }
     }
