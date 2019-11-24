@@ -244,13 +244,13 @@ public class Trie implements Speaker {
      * Precondition: None
      */
     public boolean CheckSimilarity(String wordMain, String wordBeingTested, int distancFromWords) {
-        if (distancFromWords > 0) {
+        if (distancFromWords >= 0) {
         	if( wordMain.length() == 0 && wordBeingTested.length() == 0) 
         		return true;
             if ( wordMain.length() == 0 ) 
-            	return (Math.abs(wordBeingTested.length() - distancFromWords) > 0);
+            	return (wordBeingTested.length() <= distancFromWords);
             if ( wordBeingTested.length() == 0 ) 
-            	return (Math.abs(wordMain.length() - distancFromWords) > 0);
+            	return (wordMain.length() <= distancFromWords);
             Character a = wordMain.toCharArray()[0];
             Character b = wordBeingTested.toCharArray()[0];
             if (a.compareTo(b) == 0) 
