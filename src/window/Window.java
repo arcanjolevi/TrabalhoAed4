@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+//Class that create the window of the program
 public class Window implements Listener, Speaker {
 
     private JFrame window;
@@ -43,33 +44,33 @@ public class Window implements Listener, Speaker {
     private String stringToPrint;
     private JButton buttonConsultSimilar;
     private JPanel panelMiddle;
-    private JLabel labelPalavraAConsultar;
-    private JLabel labelDistncia;
+    private JLabel labelWordToConsult;
+    private JLabel labelDistance;
     private JTextField textWordToConsult;
     private JTextField textDistance;
     private ArrayList<Listener> listeners;
 
+    //Window constructor
     public Window() {
         this.stringToPrint = "";
         this.listeners = new ArrayList<Listener>();
-        this.subscribe(listeners);
         this.window = new JFrame();
 
         this.window.setTitle("Trie");
         this.window.setBackground(Color.LIGHT_GRAY);
         this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.window.setBounds(100, 100, 703, 384);
-        contentPane = new JPanel();
-        contentPane.setBackground(Color.LIGHT_GRAY);
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        this.window.setContentPane(contentPane);
+        this.contentPane = new JPanel();
+        this.contentPane.setBackground(Color.LIGHT_GRAY);
+        this.contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        this.window.setContentPane(this.contentPane);
 
         GridBagLayout gbl_contentPane = new GridBagLayout();
         gbl_contentPane.columnWidths = new int[]{0, 0};
         gbl_contentPane.rowHeights = new int[]{86, 50, 103, 0};
         gbl_contentPane.columnWeights = new double[]{1.0, Double.MIN_VALUE};
         gbl_contentPane.rowWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
-        contentPane.setLayout(gbl_contentPane);
+        this.contentPane.setLayout(gbl_contentPane);
 
         panelUp = new JPanel();
         panelUp.setBackground(Color.LIGHT_GRAY);
@@ -79,7 +80,7 @@ public class Window implements Listener, Speaker {
         gbc_panelUp.fill = GridBagConstraints.BOTH;
         gbc_panelUp.gridx = 0;
         gbc_panelUp.gridy = 0;
-        contentPane.add(panelUp, gbc_panelUp);
+        this.contentPane.add(panelUp, gbc_panelUp);
 
         GridBagLayout gbl_panelUp = new GridBagLayout();
         gbl_panelUp.columnWidths = new int[]{5, 0, 0, 0, 5, 0};
@@ -104,14 +105,14 @@ public class Window implements Listener, Speaker {
         gbc_textPathToFile.gridy = 2;
         textPathToFile.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent e) { //Processa a palavra contida no campo palavra a processar ao apertar enter no campo
+            public void keyPressed(KeyEvent e) { //Read the words file em enter is pressed
                 if (e.getKeyChar() == 10 && !textPathToFile.getText().isEmpty()) {
                     readWordsFile();
                 }
             }
 
             @Override
-            public void keyReleased(KeyEvent e) { //Habilita ou desabilita o botao OK
+            public void keyReleased(KeyEvent e) { //Set enabled or disabled the buttons loadStopWords and loadWords
                 if (textPathToFile.getText().isEmpty()) {
                     buttonLoadStopWordsFile.setEnabled(false);
                     buttonLoadWordsFile.setEnabled(false);
@@ -131,7 +132,7 @@ public class Window implements Listener, Speaker {
         gbc_buttonChooseFile.gridy = 3;
         buttonChooseFile.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(ActionEvent arg0) { //Open the new file selector
                 selectFile();
             }
         });
@@ -144,7 +145,7 @@ public class Window implements Listener, Speaker {
         gbc_buttonLoadWordsFile.gridy = 3;
         buttonLoadWordsFile.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(ActionEvent arg0) { //Read a new word file when the button is pressed
                 readWordsFile();
             }
         });
@@ -159,7 +160,7 @@ public class Window implements Listener, Speaker {
         buttonLoadStopWordsFile.setEnabled(false);
         buttonLoadStopWordsFile.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(ActionEvent arg0) { //Read a new stop words file when the button is pressed
                 readStopWordsFile();
             }
         });
@@ -173,7 +174,7 @@ public class Window implements Listener, Speaker {
         gbc_panelMiddle.fill = GridBagConstraints.BOTH;
         gbc_panelMiddle.gridx = 0;
         gbc_panelMiddle.gridy = 1;
-        contentPane.add(panelMiddle, gbc_panelMiddle);
+        this.contentPane.add(panelMiddle, gbc_panelMiddle);
         GridBagLayout gbl_panelMiddle = new GridBagLayout();
         gbl_panelMiddle.columnWidths = new int[]{5, 259, 0, 193, 5, 0};
         gbl_panelMiddle.rowHeights = new int[]{5, 0, 5, 0};
@@ -181,19 +182,19 @@ public class Window implements Listener, Speaker {
         gbl_panelMiddle.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
         panelMiddle.setLayout(gbl_panelMiddle);
 
-        labelPalavraAConsultar = new JLabel("Palavra a consultar");
+        labelWordToConsult = new JLabel("Palavra a consultar");
         GridBagConstraints gbc_labelPalavraAConsultar = new GridBagConstraints();
         gbc_labelPalavraAConsultar.insets = new Insets(0, 0, 5, 5);
         gbc_labelPalavraAConsultar.gridx = 1;
         gbc_labelPalavraAConsultar.gridy = 1;
-        panelMiddle.add(labelPalavraAConsultar, gbc_labelPalavraAConsultar);
+        panelMiddle.add(labelWordToConsult, gbc_labelPalavraAConsultar);
 
-        labelDistncia = new JLabel("Distância");
+        labelDistance = new JLabel("Distância");
         GridBagConstraints gbc_labelDistncia = new GridBagConstraints();
         gbc_labelDistncia.insets = new Insets(0, 0, 5, 5);
         gbc_labelDistncia.gridx = 2;
         gbc_labelDistncia.gridy = 1;
-        panelMiddle.add(labelDistncia, gbc_labelDistncia);
+        panelMiddle.add(labelDistance, gbc_labelDistncia);
 
         textWordToConsult = new JTextField();
         GridBagConstraints gbc_textWordToConsult = new GridBagConstraints();
@@ -222,7 +223,7 @@ public class Window implements Listener, Speaker {
         buttonConsultSimilar.setEnabled(false);
         buttonConsultSimilar.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(ActionEvent arg0) { //Consult similar words when the button is pressed
                 speak("buttonConsultSimilarWords," + textWordToConsult.getText() + "," + textDistance.getText());
             }
         });
@@ -234,7 +235,7 @@ public class Window implements Listener, Speaker {
         gbc_panelDown.fill = GridBagConstraints.BOTH;
         gbc_panelDown.gridx = 0;
         gbc_panelDown.gridy = 2;
-        contentPane.add(panelDown, gbc_panelDown);
+        this.contentPane.add(panelDown, gbc_panelDown);
         GridBagLayout gbl_panelDown = new GridBagLayout();
         gbl_panelDown.columnWidths = new int[]{5, 0, 5, 0};
         gbl_panelDown.rowHeights = new int[]{5, 0, 0, 0, 5, 0};
@@ -282,7 +283,7 @@ public class Window implements Listener, Speaker {
         gbc_buttonConsultWord.gridy = 1;
         buttonConsultWord.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(ActionEvent arg0) { //Consult a word when the button is pressed
                 String aux = textSubWordToSearch.getText();
                 if (aux.isEmpty()) {
                     aux = "NULL";
@@ -301,7 +302,7 @@ public class Window implements Listener, Speaker {
         gbc_buttonPrintDictionary.gridy = 1;
         buttonPrintDictionary.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(ActionEvent arg0) { //Print the dictionary when the button is pressed
                 speak("printButtonPressed,");
             }
         });
@@ -311,7 +312,12 @@ public class Window implements Listener, Speaker {
         this.window.setVisible(true);
     }
 
-    public void printSimilarWords() {
+    /* Method that print all similar words to the window
+     * Input:        None
+     * Return:       None
+     * Precondition: None
+    */
+    private void printSimilarWords() {
         String aux[] = this.stringToPrint.split("\n");
         String derivatedWords = "";
         int i = 0;
@@ -323,26 +329,51 @@ public class Window implements Listener, Speaker {
         this.stringToPrint = "";
     }
 
-    public void readStopWordsFile() {
+    /* Method that read a new StopWordsFile
+     * Input:        None
+     * Return:       None
+     * Precondition: None
+    */
+    private void readStopWordsFile() {
         this.speak("buttonReadNewStopWordsFile," + this.textPathToFile.getText());
     }
-
-    public void readWordsFile() {
+    
+    /* Method that read a new WordsFile
+     * Input:        None
+     * Return:       None
+     * Precondition: None
+    */
+    private void readWordsFile() {
         this.speak("buttonReadNewWordsFile," + this.textPathToFile.getText());
     }
-
-    public void successfullyReadFile() {
+    
+    /* Method that confirm a succeffuly read of a new file
+     * Input:        None
+     * Return:       None
+     * Precondition: None
+    */
+    private void successfullyReadFile() {
         JOptionPane.showMessageDialog(null, "Arquivo lido com sucesso !", "Mensagem", JOptionPane.INFORMATION_MESSAGE);
         this.buttonConsultWord.setEnabled(true);
         this.buttonPrintDictionary.setEnabled(true);
         this.buttonConsultSimilar.setEnabled(true);
     }
-
-    public void errorReadingFile() {
+    
+    /* Method that confirm an error reading a new file
+     * Input:        None
+     * Return:       None
+     * Precondition: None
+    */
+    private void errorReadingFile() {
         JOptionPane.showMessageDialog(null, "Erro ao ler arquivo !", "Mensagem", JOptionPane.ERROR_MESSAGE);
     }
 
-    public void selectFile() {
+    /* Method that open a file selector for the user
+     * Input:        None
+     * Return:       None
+     * Precondition: None
+    */
+    private void selectFile() {
         JFileChooser j = new JFileChooser();
         String aux;
         j.showOpenDialog(null);
@@ -359,7 +390,12 @@ public class Window implements Listener, Speaker {
         }
     }
 
-    public void showOutPutWindow(String windowName, String msgToPrint) {
+    /* Method that show a outPut window with some text inside it
+     * Input:        WindowName and message to print inside the window
+     * Return:       None
+     * Precondition: None
+    */
+    private void showOutPutWindow(String windowName, String msgToPrint) {
         JFrame showOutput = new JFrame(windowName);
         showOutput.setVisible(true);
         showOutput.setBackground(Color.LIGHT_GRAY);
@@ -392,6 +428,11 @@ public class Window implements Listener, Speaker {
         scrollPane.setViewportView(textOutput);
     }
 
+    /* Method that print a maximum of 10 derivated words to the window
+     * Input:        None
+     * Return:       None
+     * Precondition: None
+    */
     public void printDerivatedWords() {
         String aux[] = this.stringToPrint.split("\n");
         String derivatedWords = "";
@@ -407,6 +448,11 @@ public class Window implements Listener, Speaker {
         this.stringToPrint = "";
     }
 
+    /* Method that print the dictionary to the screen
+     * Input:        None
+     * Return:       None
+     * Precondition: None
+    */
     public void printDictionary() {
         String aux[] = this.stringToPrint.split("\n");
         String derivatedWords = "";
