@@ -415,6 +415,8 @@ public class Window implements Listener, Speaker {
             derivatedWords += (i + 1) + ":" + a + "\n";
             i++;
         }
+        if(derivatedWords.isEmpty())
+            derivatedWords = "a";
         this.showOutPutWindow("Dicionário", derivatedWords);
         this.stringToPrint = "";
     }

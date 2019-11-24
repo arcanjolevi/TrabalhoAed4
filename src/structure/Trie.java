@@ -176,7 +176,7 @@ public class Trie implements Speaker {
      * Return:       true if you have more than one instance false otherwise
      * Precondition: None
      */
-     public boolean checkNo() {
+    public boolean checkNode() {
         int validNodes = 0;
         for (int i = 0; i < 26; i++) {
             if (this.alphabet[i] != null) {
@@ -185,7 +185,7 @@ public class Trie implements Speaker {
         }
         return validNodes > 1;
     }
-    
+
 
     /* method that checks for nearby tree nodes
      * Input:        None
@@ -193,16 +193,16 @@ public class Trie implements Speaker {
      * Precondition: None
      */
     public boolean checkNextNode() {
-    	Trie aux;
-    	for (int i = 0; i < 26; i++) {
+        Trie aux;
+        for (int i = 0; i < 26; i++) {
             if (this.alphabet[i] != null) {
                 aux = this.getNode(this.getCharacter(i));
-                if(aux.checkNo()) {
-                	return true;
+                if (aux.checkNode()) {
+                    return true;
                 }
             }
         }
-    	return false;
+        return false;
     }
 
     /* method that removes words from the tree
@@ -210,21 +210,24 @@ public class Trie implements Speaker {
      * Return:       amount of nonzero positions in vector
      * Precondition: None
      */
-    public boolean stopWords(String word){
+    public boolean stopWords(String word) {
         if (word.length() != 0) {
             Character letterToInsert = word.toCharArray()[0];
             if (this.isInserted(letterToInsert) == true) {
-                if (this.getNode(letterToInsert).stopWords(word.substring(1, word.length())) ) {
+                if (this.getNode(letterToInsert).stopWords(word.substring(1, word.length()))) {
                     this.alphabet[this.getIndex(letterToInsert)] = null;
-                    return this.checkNo();
-                }else
+                    return this.checkNode();
+                } else {
                     return false;
+                }
             }
-        }else 
-        	this.endOfWord = false;
-        	if(this.checkNo())
-        		return this.checkNextNode();
-        return this.checkNo();
+        } else {
+            this.endOfWord = false;
+        }
+        if (this.checkNode()) {
+            return this.checkNextNode();
+        }
+        return this.checkNode();
     }
 
     /* method that checks whether the word is similar to the input word within the stipulated distance
@@ -280,11 +283,11 @@ public class Trie implements Speaker {
     public void subscribe(Object listener) throws Exception {
         int i;
         if (listener instanceof Listener) {
+            if (!this.listeners.contains((Listener) listener)) {
+                this.listeners.add((Listener) listener);
+            }
             for (i = 0; i < 26; i++) {
                 if (this.isInserted(i)) {
-                    if (!this.listeners.contains((Listener) listener)) {
-                        this.listeners.add((Listener) listener);
-                    }
                     this.getNode(i).subscribe(listener); //Subscribe recursion
                 }
             }
