@@ -481,18 +481,17 @@ public class Window implements Listener, Speaker {
                 this.stringToPrint += aux[1];
             }
         }
-
-        if (aux[0].compareTo("newDerivatedWord") == 0) {
+        else if (aux[0].compareTo("newDerivatedWord") == 0) {
             if (!this.stringToPrint.contains(aux[1])) {
                 this.stringToPrint += aux[1];
             }
         }
 
-        if (aux[0].compareTo("dictionaryEnd") == 0) {
+        else if (aux[0].compareTo("dictionaryEnd") == 0) {
             this.printDictionary();
         }
 
-        if (aux[0].compareTo("derivatedWordEnd") == 0) {
+        else if (aux[0].compareTo("derivatedWordEnd") == 0) {
             if (aux.length == 2 && aux[1].compareTo("Não existem paralavras similares") == 0) {
                 this.showOutPutWindow("Palavras derivadas", "Não existem palavras derivadas para a entrada");
             } else {
@@ -500,29 +499,29 @@ public class Window implements Listener, Speaker {
             }
         }
 
-        if (aux[0].compareTo("newWordsFileSuccessfullyRead") == 0) {
+        else if (aux[0].compareTo("newWordsFileSuccessfullyRead") == 0) {
             this.successfullyReadFile();
         }
 
-        if (aux[0].compareTo("errorOnReadingNewWordsFile") == 0) {
+        else if (aux[0].compareTo("errorOnReadingNewWordsFile") == 0) {
             this.errorReadingFile();
         }
 
-        if (aux[0].compareTo("newStopWordsFileSuccessfullyRead") == 0) {
+        else if (aux[0].compareTo("newStopWordsFileSuccessfullyRead") == 0) {
             this.successfullyReadFile();
         }
 
-        if (aux[0].compareTo("errorOnReadingNewStopWordsFile") == 0) {
+        else if (aux[0].compareTo("errorOnReadingNewStopWordsFile") == 0) {
             this.errorReadingFile();
         }
 
-        if (aux[0].compareTo("newSimilarWord") == 0) {
+        else if (aux[0].compareTo("newSimilarWord") == 0) {
             if (!this.stringToPrint.contains(aux[1])) {
                 this.stringToPrint += aux[1];
             }
         }
 
-        if (aux[0].compareTo("similarWordEnd") == 0) {
+        else if (aux[0].compareTo("similarWordEnd") == 0) {
             this.printSimilarWords();
         }
     }
