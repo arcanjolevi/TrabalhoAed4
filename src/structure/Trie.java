@@ -185,7 +185,19 @@ public class Trie implements Speaker {
         }
         return validNodes > 1;
     }
-
+    /* method that check if there are any valid nodes
+     * Input:        None
+     * Return:       Returns true if any are instantiated, false otherwise
+     * Precondition: None
+     */
+    public boolean checkValidNode() {
+        for (int i = 0; i < 26; i++) {
+            if (this.alphabet[i] != null) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /* method that checks for nearby tree nodes
      * Input:        None
@@ -197,7 +209,7 @@ public class Trie implements Speaker {
         for (int i = 0; i < 26; i++) {
             if (this.alphabet[i] != null) {
                 aux = this.getNode(this.getCharacter(i));
-                if (aux.checkNode()) {
+                if (aux.checkValidNode()) {
                     return true;
                 }
             }
@@ -215,18 +227,15 @@ public class Trie implements Speaker {
             Character letterToInsert = word.toCharArray()[0];
             if (this.isInserted(letterToInsert) == true) {
                 if (this.getNode(letterToInsert).stopWords(word.substring(1, word.length()))) {
-                    this.alphabet[this.getIndex(letterToInsert)] = null;
+                	if(!this.checkNextNode())
+                		this.alphabet[this.getIndex(letterToInsert)] = null;
                     return this.checkNode();
                 } else {
                     return false;
                 }
             }
-        } else {
-            this.endOfWord = false;
         }
-        if (this.checkNode()) {
-            return this.checkNextNode();
-        }
+        this.endOfWord = false;
         return this.checkNode();
     }
 
