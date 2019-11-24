@@ -256,7 +256,7 @@ public class Trie implements Speaker {
             if (a.compareTo(b) == 0) 
                 return this.CheckSimilarity(wordMain.substring(1, wordMain.length()), wordBeingTested.substring(1, wordBeingTested.length()), distancFromWords);
             else if(a.compareTo(b) < 0)
-                return this.CheckSimilarity(wordMain, wordBeingTested.substring(1, wordBeingTested.length()), distancFromWords-1);
+                return this.CheckSimilarity(wordMain, wordBeingTested.substring(1, wordBeingTested.length()), distancFromWords);
             else 
             	return this.CheckSimilarity(wordMain.substring(1, wordMain.length()),wordBeingTested, distancFromWords-1);
         }
