@@ -368,6 +368,15 @@ public class Window implements Listener, Speaker {
     private void errorReadingFile() {
         JOptionPane.showMessageDialog(null, "Erro ao ler arquivo !", "Mensagem", JOptionPane.ERROR_MESSAGE);
     }
+    
+    /* Method that print an unrecognized error in the Window
+     * Input:        None
+     * Return:       None
+     * Precondition: None
+    */
+    private void printUnknownError(){
+        JOptionPane.showMessageDialog(null, "Erro desconhecido !", "Mensagem", JOptionPane.ERROR_MESSAGE);
+    }
 
     /* Method that open a file selector for the user
      * Input:        None
@@ -523,6 +532,10 @@ public class Window implements Listener, Speaker {
 
         else if (aux[0].compareTo("similarWordPrintEnded") == 0) {
             this.printSimilarWords();
+        }
+        
+        else if(aux[0].compareTo("error") == 0){
+            this.printUnknownError();
         }
     }
 

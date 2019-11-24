@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 //Class that represents a Trie tree
 public class Trie implements Speaker {
-
     private boolean endOfWord;
     private Trie alphabet[];
     private ArrayList<Listener> listeners;
