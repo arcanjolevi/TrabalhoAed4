@@ -15,6 +15,22 @@ public class File {
     	return line.matches("[A-Za-z]+");
     }
     
+    /**
+     * Method that removes blank spaces in string
+     * Entrada:      None
+     * Retorno:      String without spaces 
+     * Pre-condicao: None
+     */
+    public String removeWhiteSpace(String str) {
+    	int i;
+    	String[] aux;
+    	String nova = "";
+    	aux = str.split(" ");
+    	for(i=0;i<aux.length;i++)
+    		nova+=aux[i];    		
+    	return nova;
+    }
+    
     /* Method that load the file with the strings to be added to the tree
      * Input:        File path to be loaded
      * Return:       Trie class filled with the read words
@@ -26,6 +42,7 @@ public class File {
         BufferedReader ReadFile = new BufferedReader(Read);
         String Line = ReadFile.readLine();
         while(Line != null) {
+        	Line = this.removeWhiteSpace(Line);
         	if(this.WordCheck(Line) == true) {
         		Line = Line.toLowerCase();
 				trie.insert(Line);
